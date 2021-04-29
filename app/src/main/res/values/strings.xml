@@ -4,4 +4,6 @@
     <string name="TxtUser">Usuario</string>
     <string name="TxtPassword">Contraseña</string>
     <string name="btnLogin">Ingresar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
