@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">finalProject</string>
+    <string name="btnRegistrarse">Registrarse</string>
+    <string name="TxtUser">Usuario</string>
+    <string name="TxtPassword">Contraseña</string>
+    <string name="btnLogin">Ingresar</string>
 </resources>
