@@ -9,8 +9,11 @@ import androidx.lifecycle.ViewModelStore
 import androidx.navigation.fragment.findNavController
 import com.example.finalProject.R
 import com.example.finalProject.databinding.FragmentLoginBinding
+import com.squareup.picasso.Picasso
 
 class LoginFragment : Fragment(R.layout.fragment_login){
+
+
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
@@ -20,7 +23,10 @@ class LoginFragment : Fragment(R.layout.fragment_login){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
+
+        Picasso.get().load("https://upload.wikimedia.org/wikipedia/commons/5/51/Pokebola-pokeball-png-0.png").into(binding.ImageViewLogin)
         return binding.root
     }
 
@@ -28,16 +34,13 @@ class LoginFragment : Fragment(R.layout.fragment_login){
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding.btnLogin.setOnClickListener {
+        binding.btnRegister.setOnClickListener {
 
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
 
         }
+
+
         }
-
-
-
-
-
 
 }

@@ -19,4 +19,6 @@
     <string name="evolution_chain">Evolution Chain</string>
     <string name="evolution_image">evolution image</string>
     <string name="arrow_right">➔</string>
+    <string name="TxtName">Nombre</string>
+    <string name="TxtCorreo">Correo</string>
 </resources>
