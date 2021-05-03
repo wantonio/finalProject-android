@@ -14,8 +14,8 @@
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_homeAllFragment"
-            app:destination="@id/homeAllFragment" />
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -23,8 +23,8 @@
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
     <fragment
-        android:id="@+id/homeAllFragment"
-        android:name="com.example.finalProject.fragments.HomeAllFragment"
-        android:label="home_all_fragment"
-        tools:layout="@layout/home_all_fragment" />
+        android:id="@+id/mainFragment"
+        android:name="com.example.finalProject.fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" />
 </navigation>

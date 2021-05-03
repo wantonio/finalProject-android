@@ -4,18 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.finalProject.adapter.ContactAdapter
+import androidx.core.content.ContextCompat
+import com.example.finalProject.adapter.PokemonAdapter
 import com.example.finalProject.databinding.HomeAllFragmentBinding
 import com.example.finalProject.models.Contact
 import androidx.fragment.app.Fragment
-
-
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import com.example.finalProject.R
 
 class HomeAllFragment : Fragment() {
     private var _binding: HomeAllFragmentBinding? = null
     private val binding get() = _binding!!
-    // TODO Creamos variable de tipo adapter (ContactAdapter)
-    private val adapter = ContactAdapter()
+    private val adapter = PokemonAdapter()
 
      override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,15 +24,26 @@ class HomeAllFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = HomeAllFragmentBinding.inflate(inflater, container, false)
-        binding.contactsRecyclerView.adapter = adapter
-        adapter.contacts = getDummyContacts()
+        binding.pokemonsRecyclerView.adapter = adapter
+        adapter.contacts = getDummyPokemons()
+
+
+         val itemDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
+         activity?.let {
+             itemDecoration.setDrawable(ContextCompat.getDrawable(it, R.drawable.divider)!!)
+         }
+         binding.pokemonsRecyclerView.addItemDecoration(itemDecoration)
+
+         adapter.setOnItemClickListener {
+             val action = HomeAllFragmentDirections.actionHomeAllToPokemonDetailsFragment(0)
+             findNavController().navigate(action)
+         }
+
         return binding.root
     }
 
 
-
-
-    private fun getDummyContacts() : List<Contact> {
+    private fun getDummyPokemons() : List<Contact> {
         return mutableListOf(
             Contact("Pokemon 1", "https://assets.stickpng.com/thumbs/580b57fcd9996e24bc43c325.png"),
             Contact("Pokemon 2", "https://assets.stickpng.com/thumbs/580b57fcd9996e24bc43c32a.png"),

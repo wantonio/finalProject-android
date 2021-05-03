@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeFavoritesFragment">
+    tools:context=".fragments.HomeFavoritesFragment"
+    android:id="@+id/homeFavorites">
 
     <!--  TODO: Paso 2 Agregamos el RecyclerView al layout del fragment/activity  -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/contactsRecyclerView"
+        android:id="@+id/pokemonsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
