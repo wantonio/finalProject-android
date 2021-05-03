@@ -21,4 +21,7 @@
     <string name="arrow_right">➔</string>
     <string name="TxtName">Nombre</string>
     <string name="TxtCorreo">Correo</string>
+    <string name="all">All</string>
+    <string name="recent">Recent</string>
+    <string name="favorites">Favorites</string>
 </resources>

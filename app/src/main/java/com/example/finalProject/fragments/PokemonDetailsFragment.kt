@@ -9,10 +9,12 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.example.finalProject.R
 import com.example.finalProject.databinding.FragmentPokemonDetailsBinding
 
 class PokemonDetailsFragment : Fragment() {
+    // private val arguments: PokemonDetailsFragmentArgs by navArgs()
     private var _binding: FragmentPokemonDetailsBinding ? = null
     private val binding get() = _binding!!
 

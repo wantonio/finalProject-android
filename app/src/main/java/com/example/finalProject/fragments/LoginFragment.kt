@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelStore
 import androidx.navigation.fragment.findNavController
 import com.example.finalProject.R
 import com.example.finalProject.databinding.FragmentLoginBinding
@@ -35,12 +34,14 @@ class LoginFragment : Fragment(R.layout.fragment_login){
 
 
         binding.btnRegister.setOnClickListener {
-
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
 
+        binding.btnLogin.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
         }
 
 
-        }
+    }
 
 }
