@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso
 class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
     private var _binding: ListCellBinding? = null
     private val binding get() = _binding!!
-    lateinit var clickListener: () -> Unit
+    lateinit var clickListener: (pokemonId: Int) -> Unit
 
     var contacts: List<Contact> = emptyList()
         set(value) {
@@ -20,15 +20,12 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
         }
 
     inner class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        init {
-            itemView.setOnClickListener {
-                clickListener()
-            }
-        }
-
         fun bind(name: String, imageUrl: String) {
             binding.textView.text = name
             Picasso.get().load(imageUrl).into(binding.imageView)
+            itemView.setOnClickListener {
+                clickListener(2)
+            }
         }
     }
 
@@ -44,7 +41,7 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
 
     override fun getItemCount(): Int = contacts.size
 
-    fun setOnItemClickListener(clickListener: () -> Unit) {
+    fun setOnItemClickListener(clickListener: (id: Int) -> Unit) {
         this.clickListener = clickListener
     }
 }
