@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.example.finalProject.adapter.PokemonAdapter
-import com.example.finalProject.databinding.HomeAllFragmentBinding
+import com.example.finalProject.databinding.HomeFavoritesFragmentBinding
 import com.example.finalProject.models.Contact
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.finalProject.R
 
 class HomeFavoritesFragment : Fragment() {
-    private var _binding: HomeAllFragmentBinding? = null
+    private var _binding: HomeFavoritesFragmentBinding? = null
     private val binding get() = _binding!!
     private val adapter = PokemonAdapter()
 
@@ -23,7 +23,7 @@ class HomeFavoritesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = HomeAllFragmentBinding.inflate(inflater, container, false)
+        _binding = HomeFavoritesFragmentBinding.inflate(inflater, container, false)
         binding.pokemonsRecyclerView.adapter = adapter
         adapter.contacts = getDummyPokemons()
 
@@ -34,7 +34,7 @@ class HomeFavoritesFragment : Fragment() {
         binding.pokemonsRecyclerView.addItemDecoration(itemDecoration)
 
         adapter.setOnItemClickListener {
-            val action = HomeAllFragmentDirections.actionHomeAllToPokemonDetailsFragment(0)
+            val action = HomeFavoritesFragmentDirections.actionHomeFavoritesToPokemonDetailsFragment(0)
             findNavController().navigate(action)
         }
 
