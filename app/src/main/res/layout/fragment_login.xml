@@ -31,7 +31,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/TxtUser" />
+            android:hint="@string/TxtUser"
+            android:id="@+id/txtUser"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -48,7 +49,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/TxtPassword" />
+            android:hint="@string/TxtPassword"
+            android:id="@+id/txtPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -59,7 +61,8 @@
         android:text="@string/btnLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+        android:enabled="false"/>
 
     <Button
         android:id="@+id/btnRegister"

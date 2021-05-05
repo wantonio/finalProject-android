@@ -8,13 +8,20 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.finalProject.R
 import com.example.finalProject.databinding.FragmentLoginBinding
+import com.jakewharton.rxbinding4.widget.textChanges
 import com.squareup.picasso.Picasso
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.functions.BiFunction
 
 class LoginFragment : Fragment(R.layout.fragment_login){
 
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+
+    private val disposable = CompositeDisposable()
 
 
     override fun onCreateView(
@@ -40,6 +47,15 @@ class LoginFragment : Fragment(R.layout.fragment_login){
         binding.btnLogin.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
         }
+
+        disposable.add(
+            Observable.combineLatest(binding.txtUser.textChanges(), binding.txtPassword.textChanges(),
+                { queryText, quantity -> queryText.toString().isNotEmpty() && quantity.toString().isNotEmpty() })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    binding.btnLogin.isEnabled = it
+                }
+        )
 
 
     }
