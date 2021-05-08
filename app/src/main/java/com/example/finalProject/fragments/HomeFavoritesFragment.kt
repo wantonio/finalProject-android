@@ -34,7 +34,7 @@ class HomeFavoritesFragment : Fragment() {
         binding.pokemonsRecyclerView.addItemDecoration(itemDecoration)
 
         adapter.setOnItemClickListener {
-            val action = HomeFavoritesFragmentDirections.actionHomeFavoritesToPokemonDetailsFragment(0)
+            val action = HomeFavoritesFragmentDirections.actionHomeFavoritesToPokemonDetailsFragment("")
             findNavController().navigate(action)
         }
 

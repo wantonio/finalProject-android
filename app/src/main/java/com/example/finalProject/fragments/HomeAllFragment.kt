@@ -35,7 +35,7 @@ class HomeAllFragment : Fragment() {
          binding.pokemonsRecyclerView.addItemDecoration(itemDecoration)
 
          adapter.setOnItemClickListener {
-             val action = HomeAllFragmentDirections.actionHomeAllToPokemonDetailsFragment(it)
+             val action = HomeAllFragmentDirections.actionHomeAllToPokemonDetailsFragment("")
              findNavController().navigate(action)
          }
 
