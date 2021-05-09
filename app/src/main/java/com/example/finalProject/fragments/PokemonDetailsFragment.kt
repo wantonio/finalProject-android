@@ -21,11 +21,13 @@ import com.example.finalProject.viewmodels.PokemonDetailsViewModel
 import com.example.finalProject.views.PokemonEvolution
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 class PokemonDetailsFragment : Fragment() {
     private val arguments: PokemonDetailsFragmentArgs by navArgs()
     private var _binding: FragmentPokemonDetailsBinding ? = null
     private val binding get() = _binding!!
+    private val dispose = CompositeDisposable()
 
     private val viewModel: PokemonDetailsViewModel by viewModels()
 
@@ -64,7 +66,9 @@ class PokemonDetailsFragment : Fragment() {
 
         val name = if (arguments.pokemonName.isNullOrEmpty()) "venusaur" else arguments.pokemonName
 
-        viewModel.makeAPIRequest(name)
+        dispose.add((viewModel.makeAPIRequest(name)).subscribe({},{
+            //TODO manejar error
+        }))
     }
 
     private fun toggleLoading(show: Boolean) {
@@ -115,10 +119,7 @@ class PokemonDetailsFragment : Fragment() {
 
             if(id != -1) {
                 val textView: TextView = view.findViewById(id)
-
-                if(textView != null) {
-                    setStat(textView, it.base_stat.toString())
-                }
+                setStat(textView, it.base_stat.toString())
             }
         }
     }
@@ -139,14 +140,12 @@ class PokemonDetailsFragment : Fragment() {
             if(id != -1) {
                 val evolution: PokemonEvolution = view.findViewById(id)
 
-                if(evolution != null) {
-                    evolution.setName(pokemon.name)
-                    evolution.getViewImage().loadSvg(pokemon.sprites.other.dream_world.front_default)
-                    evolution.visibility = View.VISIBLE
+                evolution.setName(pokemon.name)
+                evolution.getViewImage().loadSvg(pokemon.sprites.other.dream_world.front_default)
+                evolution.visibility = View.VISIBLE
 
-                    if(arrow != null) {
-                        arrow.visibility = View.VISIBLE
-                    }
+                if(arrow != null) {
+                    arrow.visibility = View.VISIBLE
                 }
             }
         }
@@ -165,7 +164,7 @@ class PokemonDetailsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.clearDisposables()
+        dispose.clear()
         _binding = null
     }
 }

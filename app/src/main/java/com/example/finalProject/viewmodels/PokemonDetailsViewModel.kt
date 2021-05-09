@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.example.finalProject.api.APIService
 import com.example.finalProject.models.*
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -17,7 +16,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class PokemonDetailsViewModel: ViewModel() {
     private val details = MutableLiveData<PokemonDetail>()
     private var service: APIService
-    private val disposable = CompositeDisposable()
 
     init {
         val interceptor = HttpLoggingInterceptor()
@@ -41,9 +39,13 @@ class PokemonDetailsViewModel: ViewModel() {
                         call: Call<Pokemon>,
                         response: Response<Pokemon>
                     ) {
-                        response.body()?.let {
-                            emitter.onNext(it)
+                        val body = response.body()
+
+                        if (body != null) {
+                            emitter.onNext(body)
                             emitter.onComplete()
+                        } else {
+                            emitter.onError(Throwable("not found"))
                         }
                     }
 
@@ -63,9 +65,13 @@ class PokemonDetailsViewModel: ViewModel() {
                         call: Call<PokemonSpecies>,
                         response: Response<PokemonSpecies>
                     ) {
-                        response.body()?.let {
-                            emitter.onNext(it)
+                        val body = response.body()
+
+                        if (body != null) {
+                            emitter.onNext(body)
                             emitter.onComplete()
+                        } else {
+                            emitter.onError(Throwable("not found"))
                         }
                     }
 
@@ -84,9 +90,13 @@ class PokemonDetailsViewModel: ViewModel() {
                         call: Call<Evolution>,
                         response: Response<Evolution>
                     ) {
-                        response.body()?.let {
-                            emitter.onNext(it)
+                        val body = response.body()
+
+                        if (body != null) {
+                            emitter.onNext(body)
                             emitter.onComplete()
+                        } else {
+                            emitter.onError(Throwable("not found"))
                         }
                     }
 
@@ -99,8 +109,8 @@ class PokemonDetailsViewModel: ViewModel() {
 
 
 
-    fun makeAPIRequest(name: String) {
-        val disp = getPokemon(name)
+    fun makeAPIRequest(name: String): Observable<PokemonDetail> {
+        return getPokemon(name)
             .concatMap { pokemon ->
                 getPokemonSpecies(pokemon.species.url)
                     .concatMap { specie ->
@@ -119,43 +129,28 @@ class PokemonDetailsViewModel: ViewModel() {
                                 }
 
                                 recursiveFunction(evolution.chain.evolves_to)
-
-                                val innerDisp = Observable.unsafeCreate<List<Pokemon>>{ emitter ->
-                                    val evolutions = mutableListOf<Pokemon>()
-
-                                    disposable.add(
-                                        Observable
-                                            .fromIterable(pokemonNames)
-                                            .concatMap {
-                                                if (pokemon.name == it) {
-                                                    Observable.just(pokemon)
-                                                } else {
-                                                    getPokemon(it)
-                                                }
-                                            }
-                                            .subscribe({ evolutions.add(it) }, { emitter.onError(it) }, {
-                                                emitter.onNext(evolutions)
-                                                emitter.onComplete()
-                                            })
-                                    )
-                                }.subscribe{
-                                    details.postValue(PokemonDetail(pokemon, specie, it))
-                                }
-
-                                disposable.add(innerDisp)
+                                Observable
+                                    .fromIterable(pokemonNames)
+                                    .concatMap {
+                                        if (pokemon.name == it) Observable.just(pokemon) else getPokemon(it)
+                                    }
+                                    .toList()
+                                    .map{
+                                        PokemonDetail(pokemon, specie, it)
+                                    }
                             }
                     }
             }
-            .subscribe()
-
-        disposable.add(disp)
+            .concatMap {
+                Observable.fromSingle(it)
+            }
+            .concatMap {
+                details.postValue(it)
+                Observable.just(it)
+            }
     }
 
     fun getPokemonDetail(): MutableLiveData<PokemonDetail> {
         return details
-    }
-
-    fun clearDisposables() {
-        disposable.clear()
     }
 }
