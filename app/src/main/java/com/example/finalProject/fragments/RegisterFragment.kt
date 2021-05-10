@@ -5,9 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import com.example.finalProject.R
 import com.example.finalProject.databinding.FragmentLoginBinding
 import com.example.finalProject.databinding.FragmentRegisterBinding
+import com.example.finalProject.viewmodels.PokemonListViewModel
+import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
 import com.squareup.picasso.Picasso
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -21,6 +25,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private val binding get() = _binding!!
 
     private val disposable = CompositeDisposable()
+
+    private val viewModel: PokemonListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +52,12 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     binding.btnFragRegister.isEnabled = it
                 }
         )
+
+       disposable.add(
+           binding.btnFragRegister.clicks()
+               .subscribe { viewModel.makeAPIRequestById(25)}
+       )
+
     }
 
 }

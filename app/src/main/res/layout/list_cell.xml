@@ -37,14 +37,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="216dp"
+        android:backgroundTint="#00754848"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_star_big_off"
 
 
-        />
+        app:srcCompat="@android:drawable/btn_star_big_off" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeAll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeAllFragment"
-    android:id="@+id/homeAll">
+    tools:context=".fragments.HomeAllFragment">
 
 
     <!--  TODO: Paso 2 Agregamos el RecyclerView al layout del fragment/activity  -->
@@ -13,14 +13,15 @@
         android:id="@+id/pokemonsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:itemCount="3"
+        app:layout_constraintTop_toBottomOf="@+id/AllSearchtextInputLayout"
+        tools:itemCount="7"
         tools:listitem="@layout/list_cell" />
     <com.example.finalProject.views.EmptyListView
         android:id="@+id/emptyListAll"
@@ -35,4 +36,24 @@
         app:layout_constraintVertical_bias="0.0"
         android:visibility="gone"
         />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/AllSearchtextInputLayout"
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:hint="Search" />
+    </com.google.android.material.textfield.TextInputLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
