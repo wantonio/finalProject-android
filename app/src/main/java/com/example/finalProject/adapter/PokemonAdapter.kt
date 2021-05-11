@@ -12,10 +12,16 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
     private var _binding: ListCellBinding? = null
     private val binding get() = _binding!!
     lateinit var clickListener: (pokemonId: Int) -> Unit
+    var onEmptyList: (() -> Unit)? = null
 
-    var contacts: List<Contact> = emptyList()
+    var pokemons: List<Contact> = emptyList()
         set(value) {
             field = value
+
+            if (field.isEmpty()) {
+                onEmptyList?.invoke()
+            }
+
             notifyDataSetChanged()
         }
 
@@ -35,11 +41,11 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
-        val contact = contacts[position]
+        val contact = pokemons[position]
         holder.bind(contact.name, contact.imageURL)
     }
 
-    override fun getItemCount(): Int = contacts.size
+    override fun getItemCount(): Int = pokemons.size
 
     fun setOnItemClickListener(clickListener: (id: Int) -> Unit) {
         this.clickListener = clickListener

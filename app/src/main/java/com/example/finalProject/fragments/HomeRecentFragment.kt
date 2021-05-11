@@ -25,7 +25,7 @@ class HomeRecentFragment : Fragment() {
     ): View? {
         _binding = HomeRecentFragmentBinding.inflate(inflater, container, false)
         binding.pokemonsRecyclerView.adapter = adapter
-        adapter.contacts = getDummyPokemons()
+        adapter.pokemons = getDummyPokemons()
 
         val itemDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         activity?.let {
@@ -38,7 +38,14 @@ class HomeRecentFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+        toggleEmptyView(adapter.pokemons.isEmpty())
+
         return binding.root
+    }
+
+    private fun toggleEmptyView(show: Boolean) {
+        binding.emptyListAll.visibility = if (show) View.VISIBLE else View.GONE
+        binding.pokemonsRecyclerView.visibility = if (show) View.GONE else View.VISIBLE
     }
 
     private fun getDummyPokemons() : List<Contact> {

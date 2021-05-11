@@ -25,7 +25,7 @@ class HomeAllFragment : Fragment() {
     ): View? {
         _binding = HomeAllFragmentBinding.inflate(inflater, container, false)
         binding.pokemonsRecyclerView.adapter = adapter
-        adapter.contacts = getDummyPokemons()
+        adapter.pokemons = getDummyPokemons()
 
 
          val itemDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
@@ -39,7 +39,14 @@ class HomeAllFragment : Fragment() {
              findNavController().navigate(action)
          }
 
+         toggleEmptyView(adapter.pokemons.isEmpty())
+
         return binding.root
+    }
+
+    private fun toggleEmptyView(show: Boolean) {
+        binding.emptyListAll.visibility = if (show) View.VISIBLE else View.GONE
+        binding.pokemonsRecyclerView.visibility = if (show) View.GONE else View.VISIBLE
     }
 
 
@@ -52,4 +59,42 @@ class HomeAllFragment : Fragment() {
             Contact("Pokemon 5", "https://i.pinimg.com/originals/4d/88/eb/4d88ebc2b8b3a26b8d698ff189f340b3.png"),
         )
     }
+
+        //busquedas
+
+    //FORMA RX - REACTIVA
+    /* disposable.add(
+     binding.searchBox.textChanges()
+     .skipInitialValue()
+     .debounce(300, TimeUnit.MILLISECONDS)
+     .map { it.toString() }
+     .observeOn(AndroidSchedulers.mainThread())
+     .subscribe {
+         binding.textInputLayout.error = if (it.isEmpty()) "Campo requerido" else null
+     }
+     )
+
+     disposable.add(
+     Observable.combineLatest(binding.searchBox.textChanges(), binding.quantityBox.textChanges(),
+     { queryText, quantity -> queryText.toString().isNotEmpty() && quantity.toString().isNotEmpty() })
+     .observeOn(AndroidSchedulers.mainThread())
+     .subscribe {
+         binding.searchButton.isEnabled = it
+     }
+     )
+
+     disposable.add(
+     //binding.searchButton.clicks()
+     .subscribe { viewModel.makeAPIRequest(binding.searchBox.text.toString(), binding.quantityBox.text.toString().toInt()) }
+     )
+
+     disposable.add(
+     adapter.onItemClicked
+     .throttleFirst(400, TimeUnit.MILLISECONDS)
+     .subscribe {
+         Log.d("TEST", "Item clicked: ${it.main}")
+     }
+     ) */
+
+
 }
