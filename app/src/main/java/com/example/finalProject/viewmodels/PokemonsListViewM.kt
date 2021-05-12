@@ -14,7 +14,11 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+<<<<<<< Updated upstream:app/src/main/java/com/example/finalProject/viewmodels/PokemonsListViewM.kt
 class PokemonsListViewM : ViewModel(){
+=======
+class PokemonesListViewM : ViewModel(){
+>>>>>>> Stashed changes:app/src/main/java/com/example/finalProject/viewmodels/PokemonesListViewM.kt
 
 
     private val PokemonList = MutableLiveData<List<PokemonListDetail>>()

@@ -12,7 +12,11 @@ import retrofit2.http.Query
 interface APIServiceList {
     @GET("api/v2/pokemon/")
     fun getAllPokemons(
+<<<<<<< Updated upstream
             @Query("limit") limit: Int
+=======
+         @Query("limit") limit: Int
+>>>>>>> Stashed changes
     ): Call<PokemonListResponse>
 
     @GET("api/v2/pokemon/{id}")

@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import com.example.finalProject.adapter.PokemonAdapter
 import com.example.finalProject.databinding.HomeAllFragmentBinding
-import com.example.finalProject.models.Contact
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+<<<<<<< Updated upstream
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.finalProject.R
@@ -25,6 +23,18 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
 
 
             private val viewModel: PokemonsListViewM by viewModels()
+=======
+import com.example.finalProject.R
+import com.example.finalProject.adapter.ListAllAdapter
+import com.example.finalProject.viewmodels.PokemonesListViewM
+
+class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
+    private var _binding: HomeAllFragmentBinding? = null
+    private val binding : HomeAllFragmentBinding get() = _binding!!
+    private val adapter = ListAllAdapter()
+
+        private val viewModel: PokemonesListViewM by viewModels()
+>>>>>>> Stashed changes
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,16 +43,25 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     }
 
     override fun onCreateView(
+<<<<<<< Updated upstream
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
+=======
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+>>>>>>> Stashed changes
     ): View? {
         _binding = HomeAllFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+<<<<<<< Updated upstream
 
 
+=======
+>>>>>>> Stashed changes
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -61,13 +80,18 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     }
 
 
+<<<<<<< Updated upstream
     /* override fun onCreateView(
+=======
+
+     /* override fun onCreateView(
+>>>>>>> Stashed changes
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = HomeAllFragmentBinding.inflate(inflater, container, false)
-        binding.pokemonsRecyclerView.adapter = adapter
+        binding.pokemonListAllRecyclerView.adapter = adapter
         adapter.pokemons = getDummyPokemons()
 
 
@@ -75,7 +99,7 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
          activity?.let {
              itemDecoration.setDrawable(ContextCompat.getDrawable(it, R.drawable.divider)!!)
          }
-         binding.pokemonsRecyclerView.addItemDecoration(itemDecoration)
+         binding.pokemonListAllRecyclerView.addItemDecoration(itemDecoration)
 
          adapter.setOnItemClickListener {
              val action = HomeAllFragmentDirections.actionHomeAllToPokemonDetailsFragment(it)
@@ -89,11 +113,11 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
 
     private fun toggleEmptyView(show: Boolean) {
         binding.emptyListAll.visibility = if (show) View.VISIBLE else View.GONE
-        binding.pokemonsRecyclerView.visibility = if (show) View.GONE else View.VISIBLE
-    }
+        binding.pokemonListAllRecyclerView.visibility = if (show) View.GONE else View.VISIBLE
+    } */
 
 
-    private fun getDummyPokemons() : List<Contact> {
+  /*  private fun getDummyPokemons() : List<Contact> {
         return mutableListOf(
             Contact("Pokemon 1", "https://assets.stickpng.com/thumbs/580b57fcd9996e24bc43c325.png"),
             Contact("Pokemon 2", "https://assets.stickpng.com/thumbs/580b57fcd9996e24bc43c32a.png"),
