@@ -8,9 +8,7 @@ import com.example.finalProject.extensions.loadSvg
 import com.example.finalProject.models.PokemonListItem
 
 class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
-    private var _binding: ListCellBinding? = null
-    private val binding get() = _binding!!
-    lateinit var clickListener: (pokemonId: Int) -> Unit
+    lateinit var clickListener: (pokemonName: String) -> Unit
     var onEmptyList: (() -> Unit)? = null
 
     var totalCount = 0
@@ -25,24 +23,23 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
             notifyDataSetChanged()
         }
 
-    inner class PokemonViewHolder(binding: ListCellBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class PokemonViewHolder(private val binding: ListCellBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(name: String, imageUrl: String) {
             binding.namePokemon.text = name
             binding.imageView.loadSvg(imageUrl)
-            itemView.setOnClickListener {
-                clickListener(2)
+            binding.root.setOnClickListener {
+                clickListener(name)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
-        _binding = ListCellBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PokemonViewHolder(binding)
+        return PokemonViewHolder(ListCellBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         val pokemon = pokemons[position]
-        val idPattern = Regex("""(\d)/$""")
+        val idPattern = Regex("""(\d+)/$""")
         val pokemonId =  idPattern.find(pokemon.url)?.groupValues?.get(1) ?: "1"
         val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/$pokemonId.svg"
         holder.bind(pokemon.name, imageUrl)
@@ -50,7 +47,7 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
 
     override fun getItemCount(): Int = pokemons.size
 
-    fun setOnItemClickListener(clickListener: (id: Int) -> Unit) {
+    fun setOnItemClickListener(clickListener: (name: String) -> Unit) {
         this.clickListener = clickListener
     }
 }

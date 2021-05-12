@@ -44,9 +44,7 @@ class PokemonDetailsFragment : Fragment() {
 
         Glide.with(this).load(R.drawable.loading).into(binding.imageLoading)
 
-        val name = if (arguments.pokemonName.isNullOrEmpty()) "venusaur" else arguments.pokemonName
-
-        dispose.add((viewModel.makeAPIRequest(name)).subscribe({
+        dispose.add((viewModel.makeAPIRequest(arguments.pokemonName)).subscribe({
             loadHeaderInfo(it)
             loadTypesInfo(it)
             loadStatsInfo(it, view)

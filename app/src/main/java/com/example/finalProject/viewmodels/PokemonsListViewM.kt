@@ -26,7 +26,7 @@ class PokemonesListViewM : ViewModel(){
     }
 
     fun makeAPIRequest(){
-        service.getAllPokemons(limit = 15)
+        service.getAllPokemons(limit = 200)
             .enqueue(object : Callback<PokemonListResponse> {
                 override fun onResponse(call: Call<PokemonListResponse>, response: Response<PokemonListResponse>) {
                     response.body()?.let {

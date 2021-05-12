@@ -22,7 +22,7 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          adapter.setOnItemClickListener {
-             val action = HomeAllFragmentDirections.actionHomeAllToPokemonDetailsFragment("")
+             val action = HomeAllFragmentDirections.actionHomeAllToPokemonDetailsFragment(it)
              findNavController().navigate(action)
          }
         viewModel.makeAPIRequest()
@@ -50,9 +50,16 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
         binding.pokemonListAllRecyclerView.adapter = adapter
 
         viewModel.getPokemonList().observe(viewLifecycleOwner) {
+            toggleEmptyView(it.results.isEmpty())
+
             adapter.totalCount = it.count
             adapter.pokemons = it.results
         }
 
+    }
+
+    private fun toggleEmptyView(show: Boolean) {
+        binding.emptyListAll.visibility = if (show) View.VISIBLE else View.GONE
+        binding.pokemonListAllRecyclerView.visibility = if (show) View.GONE else View.VISIBLE
     }
 }
