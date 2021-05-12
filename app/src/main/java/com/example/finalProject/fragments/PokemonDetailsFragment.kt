@@ -14,6 +14,8 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.finalProject.R
 import com.example.finalProject.databinding.FragmentPokemonDetailsBinding
+import com.example.finalProject.extensions.loadImage
+import com.example.finalProject.extensions.loadMaybeSvg
 import com.example.finalProject.extensions.loadSvg
 import com.example.finalProject.models.PokemonDetail
 import com.example.finalProject.utils.Utils
@@ -21,6 +23,7 @@ import com.example.finalProject.viewmodels.PokemonDetailsViewModel
 import com.example.finalProject.views.PokemonEvolution
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.squareup.picasso.Picasso
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 class PokemonDetailsFragment : Fragment() {
@@ -67,7 +70,7 @@ class PokemonDetailsFragment : Fragment() {
                 txt.language.name == "en"
             }
             ?.flavor_text?.replace("\n", " ")
-        binding.pokemonImage.loadSvg(detail.pokemon.sprites.other.dream_world.front_default )
+        binding.pokemonImage.loadMaybeSvg(detail.pokemon.sprites.other.dream_world.front_default, detail.pokemon.sprites.front_default)
     }
 
     private fun loadTypesInfo(detail: PokemonDetail) {
@@ -113,7 +116,7 @@ class PokemonDetailsFragment : Fragment() {
                 val evolutionView: PokemonEvolution = view.findViewById(id)
 
                 evolutionView.setName(evolution.name)
-                evolutionView.getViewImage().loadSvg(evolution.sprites.other.dream_world.front_default)
+                evolutionView.getViewImage().loadMaybeSvg(evolution.sprites.other.dream_world.front_default, evolution.sprites.front_default)
                 evolutionView.visibility = View.VISIBLE
                 evolutionView.setOnClickListener{
                     if (details.pokemon.name != evolution.name) {
