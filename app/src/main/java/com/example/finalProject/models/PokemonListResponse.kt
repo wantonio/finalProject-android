@@ -1,3 +1,3 @@
 package com.example.finalProject.models
 
-data class PokemonListResponse(val list: List<PokemonListDetail>)
+data class PokemonListResponse(val count: Int,   val results: List<PokemonListItem>)

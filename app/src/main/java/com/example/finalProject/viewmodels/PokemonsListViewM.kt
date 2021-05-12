@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.finalProject.api.APIServiceList
-import com.example.finalProject.models.PokemonListDetail
 import com.example.finalProject.models.PokemonListResponse
 import retrofit2.Call
 import retrofit2.Callback

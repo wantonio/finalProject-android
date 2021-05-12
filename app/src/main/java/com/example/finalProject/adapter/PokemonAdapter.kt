@@ -6,7 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.finalProject.models.Contact
 import com.example.finalProject.databinding.ListCellBinding
+import com.example.finalProject.models.PokemonListItem
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import java.lang.Exception
 
 class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
     private var _binding: ListCellBinding? = null
@@ -14,7 +17,8 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
     lateinit var clickListener: (pokemonId: Int) -> Unit
     var onEmptyList: (() -> Unit)? = null
 
-    var pokemons: List<Contact> = emptyList()
+    var totalCount = 0
+    var pokemons: List<PokemonListItem> = emptyList()
         set(value) {
             field = value
 
@@ -41,8 +45,13 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
-        val contact = pokemons[position]
-        holder.bind(contact.name, contact.imageURL)
+        val pokemon = pokemons[position]
+        val idPattern = Regex("""(\d)/$""")
+        val pokemonId =  idPattern.find(pokemon.url)?.groupValues?.get(1)
+        val imageUrl =
+            if (pokemonId != null) "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/$pokemonId.svg"
+            else "https://cdn.shopify.com/s/files/1/0941/8552/products/Pokemon_-_Pokeball_large.jpg"
+        holder.bind(pokemon.name, imageUrl)
     }
 
     override fun getItemCount(): Int = pokemons.size

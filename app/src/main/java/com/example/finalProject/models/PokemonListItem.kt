@@ -1,3 +1,3 @@
 package com.example.finalProject.models
 
-data class PokemonList(val id: Int, val name: String)
+data class PokemonListItem(val name: String, val url: String)
