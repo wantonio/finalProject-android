@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.finalProject.api.APIServiceList
-import com.example.finalProject.models.Pokemon
-import com.example.finalProject.models.PokemonList
 import com.example.finalProject.models.PokemonListDetail
 import com.example.finalProject.models.PokemonListResponse
 import retrofit2.Call
@@ -16,10 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class PokemonesListViewM : ViewModel(){
-
-
-
-    private val PokemonList = MutableLiveData<List<PokemonListDetail>>()
+    private val pokemonList = MutableLiveData<PokemonListResponse>()
     private var service: APIServiceList
 
     init {
@@ -36,7 +31,7 @@ class PokemonesListViewM : ViewModel(){
             .enqueue(object : Callback<PokemonListResponse> {
                 override fun onResponse(call: Call<PokemonListResponse>, response: Response<PokemonListResponse>) {
                     response.body()?.let {
-                        PokemonList.postValue(it.list)
+                        pokemonList.postValue(it)
                     }
                 }
 
@@ -48,9 +43,8 @@ class PokemonesListViewM : ViewModel(){
 
     }
 
-    fun getPokemonList() : LiveData<List<PokemonListDetail>>{
-        return PokemonList
-
+    fun getPokemonList() : LiveData<PokemonListResponse>{
+        return pokemonList
     }
 
 
