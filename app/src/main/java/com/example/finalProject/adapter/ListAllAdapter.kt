@@ -13,13 +13,10 @@ import com.example.finalProject.models.PokemonListDetail
 
 
 class ListAllAdapter : RecyclerView.Adapter<ListAllAdapter.PokemonViewHolder>(){
-<<<<<<< Updated upstream
+
     // private var _binding: ListCellBinding? = null
     // private val binding get() = _binding!!
-=======
-   // private var _binding: ListCellBinding? = null
-   // private val binding get() = _binding!!
->>>>>>> Stashed changes
+
 
 
     var pokemonesLista: List<PokemonListDetail> = emptyList()
@@ -44,18 +41,18 @@ class ListAllAdapter : RecyclerView.Adapter<ListAllAdapter.PokemonViewHolder>(){
 
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
-<<<<<<< Updated upstream
+
         holder.bind(pokemonesLista[position].PokemonList.first())
-=======
-      holder.bind(pokemonesLista[position].PokemonList.first())
->>>>>>> Stashed changes
+
+
+
     }
 
     override fun getItemCount(): Int = pokemonesLista.size
 
-<<<<<<< Updated upstream
+
 }
-=======
-    }
->>>>>>> Stashed changes
+
+
+
 
