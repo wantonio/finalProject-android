@@ -14,10 +14,10 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class PokemonesListVM : ViewModel(){
+class PokemonsListViewM : ViewModel(){
 
 
-    private val PokemonListR = MutableLiveData<List<PokemonListDetail>>()
+    private val PokemonList = MutableLiveData<List<PokemonListDetail>>()
     private var service: APIServiceList
 
     init {
@@ -34,7 +34,7 @@ class PokemonesListVM : ViewModel(){
             .enqueue(object : Callback<PokemonListResponse> {
                 override fun onResponse(call: Call<PokemonListResponse>, response: Response<PokemonListResponse>) {
                     response.body()?.let {
-                        PokemonListR.postValue(it.list)
+                        PokemonList.postValue(it.list)
                     }
                 }
 
@@ -47,7 +47,7 @@ class PokemonesListVM : ViewModel(){
     }
 
     fun getPokemonList() : LiveData<List<PokemonListDetail>>{
-        return PokemonListR
+        return PokemonList
 
     }
 

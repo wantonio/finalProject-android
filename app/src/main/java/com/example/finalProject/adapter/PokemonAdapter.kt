@@ -27,7 +27,7 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
 
     inner class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(name: String, imageUrl: String) {
-            binding.textView.text = name
+            binding.namePokemon.text = name
             Picasso.get().load(imageUrl).into(binding.imageView)
             itemView.setOnClickListener {
                 clickListener(2)

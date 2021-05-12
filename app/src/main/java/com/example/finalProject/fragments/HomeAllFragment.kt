@@ -9,16 +9,59 @@ import com.example.finalProject.adapter.PokemonAdapter
 import com.example.finalProject.databinding.HomeAllFragmentBinding
 import com.example.finalProject.models.Contact
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.finalProject.R
+import com.example.finalProject.adapter.ListAllAdapter
+import com.example.finalProject.viewmodels.PokemonsListViewM
 
-class HomeAllFragment : Fragment() {
+class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     private var _binding: HomeAllFragmentBinding? = null
     private val binding get() = _binding!!
-    private val adapter = PokemonAdapter()
+    private val adapter = ListAllAdapter()
 
-     override fun onCreateView(
+
+
+            private val viewModel: PokemonsListViewM by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.makeAPIRequest()
+    }
+
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        _binding = HomeAllFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.pokemonListAllRecyclerView.adapter
+
+        viewModel.getPokemonList().observe(viewLifecycleOwner) { it
+            adapter.pokemonesLista = it
+
+        }
+
+    }
+
+
+    /* override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,7 +101,7 @@ class HomeAllFragment : Fragment() {
             Contact("Pokemon 4", "https://pm1.narvii.com/6270/a66f81df957afcda3bbb6b1723b5b3928436a8dc_hq.jpg"),
             Contact("Pokemon 5", "https://i.pinimg.com/originals/4d/88/eb/4d88ebc2b8b3a26b8d698ff189f340b3.png"),
         )
-    }
+    } */
 
         //busquedas
 
