@@ -10,14 +10,13 @@
 
     <!--  TODO: Paso 2 Agregamos el RecyclerView al layout del fragment/activity  -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/pokemonsRecyclerView"
+        android:id="@+id/pokemonListAllRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AllSearchtextInputLayout"

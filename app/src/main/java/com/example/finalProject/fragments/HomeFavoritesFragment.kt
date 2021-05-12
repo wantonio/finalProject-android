@@ -25,7 +25,6 @@ class HomeFavoritesFragment : Fragment() {
     ): View? {
         _binding = HomeFavoritesFragmentBinding.inflate(inflater, container, false)
         binding.pokemonsRecyclerView.adapter = adapter
-        adapter.pokemons = getDummyPokemons()
 
         val itemDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         activity?.let {
