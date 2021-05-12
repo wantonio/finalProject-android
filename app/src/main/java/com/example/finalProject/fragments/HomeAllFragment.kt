@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.example.finalProject.databinding.HomeAllFragmentBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +13,7 @@ import com.example.finalProject.R
 import com.example.finalProject.adapter.PokemonAdapter
 import com.example.finalProject.viewmodels.PokemonesListViewM
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 
 class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     private var _binding: HomeAllFragmentBinding? = null
@@ -25,6 +27,7 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
              val action = HomeAllFragmentDirections.actionHomeAllToPokemonDetailsFragment(it)
              findNavController().navigate(action)
          }
+
         viewModel.makeAPIRequest()
     }
 
@@ -35,6 +38,12 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
 
     ): View? {
         _binding = HomeAllFragmentBinding.inflate(inflater, container, false)
+        activity?.let {
+            val itemDecoration = DividerItemDecoration(it, DividerItemDecoration.VERTICAL)
+            itemDecoration.setDrawable(ContextCompat.getDrawable(it, R.drawable.divider)!!)
+            binding.pokemonListAllRecyclerView.addItemDecoration(itemDecoration)
+        }
+
         return binding.root
     }
 
