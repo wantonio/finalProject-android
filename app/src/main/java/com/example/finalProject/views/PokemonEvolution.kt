@@ -3,8 +3,8 @@ package com.example.finalProject.views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.finalProject.R
 import com.example.finalProject.databinding.PokemonEvolutionBinding
 
 
@@ -23,5 +23,13 @@ class PokemonEvolution: ConstraintLayout {
         // _binding = PokemonEvolutionBinding.inflate(LayoutInflater.from(context), this, false)
         // inflate the layout into "this" layout
         // inflater.inflate(R.layout.pokemon_evolution, this)
+    }
+
+    fun getViewImage(): ImageView {
+        return binding.evolutionImage
+    }
+
+    fun setName(name: String) {
+        binding.evolutionName.text = name
     }
 }

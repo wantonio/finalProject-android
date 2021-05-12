@@ -7,32 +7,132 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.finalProject.R
 import com.example.finalProject.databinding.FragmentPokemonDetailsBinding
+import com.example.finalProject.extensions.loadSvg
+import com.example.finalProject.models.PokemonDetail
+import com.example.finalProject.utils.Utils
+import com.example.finalProject.viewmodels.PokemonDetailsViewModel
+import com.example.finalProject.views.PokemonEvolution
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 class PokemonDetailsFragment : Fragment() {
-    // private val arguments: PokemonDetailsFragmentArgs by navArgs()
+    private val arguments: PokemonDetailsFragmentArgs by navArgs()
     private var _binding: FragmentPokemonDetailsBinding ? = null
     private val binding get() = _binding!!
+    private val dispose = CompositeDisposable()
+
+    private val viewModel: PokemonDetailsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPokemonDetailsBinding.inflate(inflater, container, false)
-        initStats()
         return binding.root
     }
 
-    private fun initStats() {
-        for(child in binding.wrapStats.children) {
-            val auxTextView:TextView = (child as TextView)
-            val text:String = getColoredStat( auxTextView.text.toString(), "76" )
-            auxTextView.text = Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        Glide.with(this).load(R.drawable.loading).into(binding.imageLoading)
+
+        dispose.add((viewModel.makeAPIRequest(arguments.pokemonName)).subscribe({
+            loadHeaderInfo(it)
+            loadTypesInfo(it)
+            loadStatsInfo(it, view)
+            loadEvolutionsInfo(it, view)
+            toggleLoading(false)
+        },{
+            //TODO manejar error
+        }))
+    }
+
+    private fun toggleLoading(show: Boolean) {
+        binding.imageLoading.visibility = if (show) View.VISIBLE else View.GONE
+        binding.mainContent.visibility = if (show) View.GONE else View.VISIBLE
+    }
+
+    private fun loadHeaderInfo(detail: PokemonDetail) {
+        binding.pokemonName.text = detail.pokemon.name
+        binding.pokemonDesc.text = detail.species.flavor_text_entries
+            .find{ txt ->
+                txt.language.name == "en"
+            }
+            ?.flavor_text?.replace("\n", " ")
+        binding.pokemonImage.loadSvg(detail.pokemon.sprites.other.dream_world.front_default )
+    }
+
+    private fun loadTypesInfo(detail: PokemonDetail) {
+        val chipLayoutParams = ChipGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        chipLayoutParams.setMargins(10, 0, 10, 0)
+
+        detail.pokemon.types.forEach { innerObj ->
+            val chip = Chip(this.context)
+            chip.text = innerObj.type.name
+            chip.layoutParams = chipLayoutParams
+            binding.wrapType.addView(chip)
         }
+    }
+
+    private fun loadStatsInfo(details: PokemonDetail, view: View) {
+        setStat(binding.textHeight, details.pokemon.height.toString())
+        setStat(binding.textWeight, details.pokemon.weight.toString())
+
+        details.pokemon.stats.forEach{
+            val id = Utils.getResId("textStat_${it.stat.name.replace("-","_")}", R.id::class.java)
+
+            if(id != -1) {
+                val textView: TextView = view.findViewById(id)
+                setStat(textView, it.base_stat.toString())
+            }
+        }
+    }
+
+    private fun loadEvolutionsInfo(details: PokemonDetail, view: View) {
+        details.evolutions.forEachIndexed{
+                index, evolution ->
+
+            val id = Utils.getResId("evolution_${index + 1}", R.id::class.java)
+            var arrow: TextView? = null
+
+            if (index == 1) {
+                arrow = binding.evolutionArrow1
+            } else if(index == 2) {
+                arrow = binding.evolutionArrow2
+            }
+
+            if(id != -1) {
+                val evolutionView: PokemonEvolution = view.findViewById(id)
+
+                evolutionView.setName(evolution.name)
+                evolutionView.getViewImage().loadSvg(evolution.sprites.other.dream_world.front_default)
+                evolutionView.visibility = View.VISIBLE
+                evolutionView.setOnClickListener{
+                    if (details.pokemon.name != evolution.name) {
+                        toggleLoading(true)
+                        val action = PokemonDetailsFragmentDirections.actionPokemonDetailsFragmentSelf(evolution.name)
+                        findNavController().navigate(action)
+                    }
+                }
+
+                if(arrow != null) {
+                    arrow.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private fun setStat(statText: TextView, value: String) {
+        val text:String = getColoredStat( statText.text.toString(), value )
+        statText.text = Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
     }
 
     private fun getColoredStat(stat: String, value: String): String {
@@ -43,6 +143,7 @@ class PokemonDetailsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        dispose.clear()
         _binding = null
     }
 }

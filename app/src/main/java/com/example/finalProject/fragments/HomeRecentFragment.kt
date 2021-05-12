@@ -25,7 +25,6 @@ class HomeRecentFragment : Fragment() {
     ): View? {
         _binding = HomeRecentFragmentBinding.inflate(inflater, container, false)
         binding.pokemonsRecyclerView.adapter = adapter
-        adapter.pokemons = getDummyPokemons()
 
         val itemDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         activity?.let {
@@ -34,7 +33,7 @@ class HomeRecentFragment : Fragment() {
         binding.pokemonsRecyclerView.addItemDecoration(itemDecoration)
 
         adapter.setOnItemClickListener {
-            val action = HomeRecentFragmentDirections.actionHomeRecentToPokemonDetailsFragment(0)
+            val action = HomeRecentFragmentDirections.actionHomeRecentToPokemonDetailsFragment("")
             findNavController().navigate(action)
         }
 
