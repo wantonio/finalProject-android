@@ -6,12 +6,13 @@
         <entry key="app/src/main/res/layout/empty_list_view.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.14895833333333333" />
-        <entry key="app/src/main/res/layout/fragment_pokemon_details.xml" value="0.14895833333333333" />
+        <entry key="app/src/main/res/layout/fragment_pokemon_details.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/layout/home_all_fragment.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/layout/home_favorites_fragment.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/layout/home_recent_fragment.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/layout/list_cell.xml" value="0.14895833333333333" />
+        <entry key="app/src/main/res/layout/pokemon_evolution.xml" value="0.14895833333333333" />
       </map>
     </option>
   </component>

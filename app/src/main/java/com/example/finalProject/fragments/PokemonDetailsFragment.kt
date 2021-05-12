@@ -11,19 +11,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.bumptech.glide.Glide
 import com.example.finalProject.R
+import com.example.finalProject.adapter.EvolutionAdapter
 import com.example.finalProject.databinding.FragmentPokemonDetailsBinding
-import com.example.finalProject.extensions.loadImage
 import com.example.finalProject.extensions.loadMaybeSvg
-import com.example.finalProject.extensions.loadSvg
 import com.example.finalProject.models.PokemonDetail
 import com.example.finalProject.utils.Utils
 import com.example.finalProject.viewmodels.PokemonDetailsViewModel
 import com.example.finalProject.views.PokemonEvolution
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.squareup.picasso.Picasso
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 class PokemonDetailsFragment : Fragment() {
@@ -31,7 +30,7 @@ class PokemonDetailsFragment : Fragment() {
     private var _binding: FragmentPokemonDetailsBinding ? = null
     private val binding get() = _binding!!
     private val dispose = CompositeDisposable()
-
+    private lateinit var evolutionAdapter: EvolutionAdapter
     private val viewModel: PokemonDetailsViewModel by viewModels()
 
     override fun onCreateView(
@@ -39,6 +38,8 @@ class PokemonDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPokemonDetailsBinding.inflate(inflater, container, false)
+        evolutionAdapter = EvolutionAdapter()
+        binding.evolutionChain.adapter = evolutionAdapter
         return binding.root
     }
 
@@ -47,15 +48,29 @@ class PokemonDetailsFragment : Fragment() {
 
         Glide.with(this).load(R.drawable.loading).into(binding.imageLoading)
 
+        toggleLoading(true)
+
         dispose.add((viewModel.makeAPIRequest(arguments.pokemonName)).subscribe({
             loadHeaderInfo(it)
             loadTypesInfo(it)
             loadStatsInfo(it, view)
-            loadEvolutionsInfo(it, view)
+            //loadEvolutionsInfo(it, view)
+            loadEvolutionChainInfo(it)
             toggleLoading(false)
         },{
             //TODO manejar error
         }))
+    }
+
+    private fun loadEvolutionChainInfo(details: PokemonDetail) {
+        evolutionAdapter.pokemons = details.evolutions
+
+        evolutionAdapter.onItemClick = {
+            if (details.pokemon.name != it) {
+                val action = PokemonDetailsFragmentDirections.actionPokemonDetailsFragmentSelf(it)
+                findNavController().navigate(action)
+            }
+        }
     }
 
     private fun toggleLoading(show: Boolean) {
@@ -95,40 +110,6 @@ class PokemonDetailsFragment : Fragment() {
             if(id != -1) {
                 val textView: TextView = view.findViewById(id)
                 setStat(textView, it.base_stat.toString())
-            }
-        }
-    }
-
-    private fun loadEvolutionsInfo(details: PokemonDetail, view: View) {
-        details.evolutions.forEachIndexed{
-                index, evolution ->
-
-            val id = Utils.getResId("evolution_${index + 1}", R.id::class.java)
-            var arrow: TextView? = null
-
-            if (index == 1) {
-                arrow = binding.evolutionArrow1
-            } else if(index == 2) {
-                arrow = binding.evolutionArrow2
-            }
-
-            if(id != -1) {
-                val evolutionView: PokemonEvolution = view.findViewById(id)
-
-                evolutionView.setName(evolution.name)
-                evolutionView.getViewImage().loadMaybeSvg(evolution.sprites.other.dream_world.front_default, evolution.sprites.front_default)
-                evolutionView.visibility = View.VISIBLE
-                evolutionView.setOnClickListener{
-                    if (details.pokemon.name != evolution.name) {
-                        toggleLoading(true)
-                        val action = PokemonDetailsFragmentDirections.actionPokemonDetailsFragmentSelf(evolution.name)
-                        findNavController().navigate(action)
-                    }
-                }
-
-                if(arrow != null) {
-                    arrow.visibility = View.VISIBLE
-                }
             }
         }
     }
