@@ -1,10 +1,10 @@
 package com.example.finalProject.viewmodels
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.finalProject.api.APIService
 import com.example.finalProject.models.*
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -14,7 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class PokemonDetailsViewModel: ViewModel() {
-    private val details = MutableLiveData<PokemonDetail>()
+    private val detailsSubject = PublishSubject.create<PokemonDetail>()
     private var service: APIService
 
     init {
@@ -110,7 +110,7 @@ class PokemonDetailsViewModel: ViewModel() {
 
 
     fun makeAPIRequest(name: String): Observable<PokemonDetail> {
-        return getPokemon(name)
+        getPokemon(name)
             .concatMap { pokemon ->
                 getPokemonSpecies(pokemon.species.url)
                     .concatMap { specie ->
@@ -143,14 +143,8 @@ class PokemonDetailsViewModel: ViewModel() {
             }
             .concatMap {
                 Observable.fromSingle(it)
-            }
-            .concatMap {
-                details.postValue(it)
-                Observable.just(it)
-            }
-    }
+            }.subscribe({ detailsSubject.onNext(it) }, { detailsSubject.onError(it) })
 
-    fun getPokemonDetail(): MutableLiveData<PokemonDetail> {
-        return details
+        return detailsSubject
     }
 }

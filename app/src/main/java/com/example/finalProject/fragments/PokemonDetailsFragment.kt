@@ -44,29 +44,15 @@ class PokemonDetailsFragment : Fragment() {
 
         Glide.with(this).load(R.drawable.loading).into(binding.imageLoading)
 
-        binding.evolution1.setOnClickListener{
-            handleEvolutionClick(0)
-        }
+        val name = if (arguments.pokemonName.isNullOrEmpty()) "venusaur" else arguments.pokemonName
 
-        binding.evolution2.setOnClickListener{
-            handleEvolutionClick(1)
-        }
-
-        binding.evolution3.setOnClickListener{
-            handleEvolutionClick(2)
-        }
-
-        viewModel.getPokemonDetail().observe(viewLifecycleOwner) {
+        dispose.add((viewModel.makeAPIRequest(name)).subscribe({
             loadHeaderInfo(it)
             loadTypesInfo(it)
             loadStatsInfo(it, view)
             loadEvolutionsInfo(it, view)
             toggleLoading(false)
-        }
-
-        val name = if (arguments.pokemonName.isNullOrEmpty()) "venusaur" else arguments.pokemonName
-
-        dispose.add((viewModel.makeAPIRequest(name)).subscribe({},{
+        },{
             //TODO manejar error
         }))
     }
@@ -74,18 +60,6 @@ class PokemonDetailsFragment : Fragment() {
     private fun toggleLoading(show: Boolean) {
         binding.imageLoading.visibility = if (show) View.VISIBLE else View.GONE
         binding.mainContent.visibility = if (show) View.GONE else View.VISIBLE
-    }
-
-    private fun handleEvolutionClick(index: Int) {
-        val details = viewModel.getPokemonDetail().value
-        val evolution = details?.evolutions?.get(index)
-        val pokemon = details?.pokemon
-
-        if (pokemon != null && evolution != null && pokemon.name != evolution.name) {
-            toggleLoading(true)
-            val action = PokemonDetailsFragmentDirections.actionPokemonDetailsFragmentSelf(evolution.name)
-            findNavController().navigate(action)
-        }
     }
 
     private fun loadHeaderInfo(detail: PokemonDetail) {
@@ -126,7 +100,7 @@ class PokemonDetailsFragment : Fragment() {
 
     private fun loadEvolutionsInfo(details: PokemonDetail, view: View) {
         details.evolutions.forEachIndexed{
-                index, pokemon ->
+                index, evolution ->
 
             val id = Utils.getResId("evolution_${index + 1}", R.id::class.java)
             var arrow: TextView? = null
@@ -138,11 +112,18 @@ class PokemonDetailsFragment : Fragment() {
             }
 
             if(id != -1) {
-                val evolution: PokemonEvolution = view.findViewById(id)
+                val evolutionView: PokemonEvolution = view.findViewById(id)
 
-                evolution.setName(pokemon.name)
-                evolution.getViewImage().loadSvg(pokemon.sprites.other.dream_world.front_default)
-                evolution.visibility = View.VISIBLE
+                evolutionView.setName(evolution.name)
+                evolutionView.getViewImage().loadSvg(evolution.sprites.other.dream_world.front_default)
+                evolutionView.visibility = View.VISIBLE
+                evolutionView.setOnClickListener{
+                    if (details.pokemon.name != evolution.name) {
+                        toggleLoading(true)
+                        val action = PokemonDetailsFragmentDirections.actionPokemonDetailsFragmentSelf(evolution.name)
+                        findNavController().navigate(action)
+                    }
+                }
 
                 if(arrow != null) {
                     arrow.visibility = View.VISIBLE
