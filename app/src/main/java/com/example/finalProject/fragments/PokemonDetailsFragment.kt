@@ -18,9 +18,9 @@ import com.example.finalProject.adapter.EvolutionAdapter
 import com.example.finalProject.databinding.FragmentPokemonDetailsBinding
 import com.example.finalProject.extensions.loadMaybeSvg
 import com.example.finalProject.models.PokemonDetail
+import com.example.finalProject.utils.CustomDividerItemDecoration
 import com.example.finalProject.utils.Utils
 import com.example.finalProject.viewmodels.PokemonDetailsViewModel
-import com.example.finalProject.views.PokemonEvolution
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -40,6 +40,13 @@ class PokemonDetailsFragment : Fragment() {
         _binding = FragmentPokemonDetailsBinding.inflate(inflater, container, false)
         evolutionAdapter = EvolutionAdapter()
         binding.evolutionChain.adapter = evolutionAdapter
+
+        activity?.let {
+            val divider = CustomDividerItemDecoration(it, DividerItemDecoration.HORIZONTAL)
+            divider.setDrawable(ContextCompat.getDrawable(it, R.drawable.arrow)!!)
+            binding.evolutionChain.addItemDecoration(divider)
+        }
+
         return binding.root
     }
 
@@ -54,7 +61,6 @@ class PokemonDetailsFragment : Fragment() {
             loadHeaderInfo(it)
             loadTypesInfo(it)
             loadStatsInfo(it, view)
-            //loadEvolutionsInfo(it, view)
             loadEvolutionChainInfo(it)
             toggleLoading(false)
         },{
