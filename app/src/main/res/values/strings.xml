@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">finalProject</string>
+    <string name="app_name">PokeApp</string>
     <string name="btnRegistrarse">Registrarse</string>
     <string name="TxtUser">Usuario</string>
     <string name="TxtPassword">Contraseña</string>

@@ -13,7 +13,19 @@ interface APIServiceList {
 
             @Query("limit") limit: Int
 
+    ): Call<PokemonListResponse>
 
+    @GET("api/v2/pokemon/")
+    fun se(
+
+        @Query("name") name: String
+
+
+    ): Call<PokemonListResponse>
+
+    @GET("pokemon/{name}")
+    fun getPokemonByName(
+        @Path("name") name: String
     ): Call<PokemonListResponse>
 
     @GET("api/v2/pokemon/{id}")
