@@ -48,8 +48,6 @@ class LoginFragment : Fragment(R.layout.fragment_login){
 
         Picasso.get().load("https://upload.wikimedia.org/wikipedia/commons/5/51/Pokebola-pokeball-png-0.png").into(binding.ImageViewLogin)
 
-
-
         return binding.root
     }
 
