@@ -16,7 +16,7 @@ interface UserDAO {
     @Query("SELECT * FROM user_table")
     fun getAllUser(): LiveData<List<User>>
 
-    @Query("SELECT * FROM user_table where email = :emailUser and password = :passwordUser")
+    @Query("SELECT * FROM user_table where email == (:emailUser) and password == (:passwordUser)")
     fun getUserById(emailUser: String, passwordUser: String): User
 
 }

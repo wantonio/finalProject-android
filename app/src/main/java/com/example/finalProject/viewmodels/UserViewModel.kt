@@ -13,6 +13,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     val getAllUser: LiveData<List<User>>
     private val repository: PokemonRepository
+    private var user: User? = null
 
     init {
         val userDao = PokemonDatabase.getDatabase(application).UserDAO()
@@ -28,8 +29,11 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getAllUser() : LiveData<List<User>> = getAllUser
 
-    fun getUserById(emailUser: String, passwordUser: String): User {
-            return repository.getUserById(emailUser, passwordUser)
+    fun getUserById(emailUser: String, passwordUser: String): User? {
+        viewModelScope.launch(Dispatchers.IO) {
+            user = repository.getUserById(emailUser, passwordUser)
+        }
+        return user
     }
 
 }
