@@ -13,29 +13,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.finalProject.R
-import com.example.finalProject.databinding.FragmentLoginBinding
 import com.example.finalProject.databinding.FragmentRegisterBinding
 import com.example.finalProject.db.entities.User
 import com.example.finalProject.viewmodels.PokemonListViewModel
 import com.example.finalProject.viewmodels.UserViewModel
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
-import com.squareup.picasso.Picasso
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.functions.BiFunction
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-
     private val disposable = CompositeDisposable()
-
     private val viewModel: PokemonListViewModel by viewModels()
     private lateinit var mUserViewModel: UserViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +63,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         }
         )
     }
+
 
     private fun insertDataToDatabase() {
         val userName = binding.TxtFragUser.text.toString()

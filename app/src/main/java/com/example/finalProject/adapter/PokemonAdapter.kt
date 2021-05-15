@@ -1,20 +1,18 @@
 package com.example.finalProject.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.finalProject.models.Contact
 import com.example.finalProject.databinding.ListCellBinding
-import com.squareup.picasso.Picasso
+import com.example.finalProject.extensions.loadSvg
+import com.example.finalProject.models.PokemonListItem
 
 class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
-    private var _binding: ListCellBinding? = null
-    private val binding get() = _binding!!
-    lateinit var clickListener: (pokemonId: Int) -> Unit
+    lateinit var clickListener: (pokemonName: String) -> Unit
     var onEmptyList: (() -> Unit)? = null
 
-    var pokemons: List<Contact> = emptyList()
+    var totalCount = 0
+    var pokemons: List<PokemonListItem> = emptyList()
         set(value) {
             field = value
 
@@ -25,29 +23,31 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
             notifyDataSetChanged()
         }
 
-    inner class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class PokemonViewHolder(private val binding: ListCellBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(name: String, imageUrl: String) {
-            binding.textView.text = name
-            Picasso.get().load(imageUrl).into(binding.imageView)
-            itemView.setOnClickListener {
-                clickListener(2)
+            binding.namePokemon.text = name
+            binding.imageView.loadSvg(imageUrl)
+            binding.root.setOnClickListener {
+                clickListener(name)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
-        _binding = ListCellBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PokemonViewHolder(binding.root)
+        return PokemonViewHolder(ListCellBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
-        val contact = pokemons[position]
-        holder.bind(contact.name, contact.imageURL)
+        val pokemon = pokemons[position]
+        val idPattern = Regex("""(\d+)/$""")
+        val pokemonId =  idPattern.find(pokemon.url)?.groupValues?.get(1) ?: "1"
+        val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/$pokemonId.svg"
+        holder.bind(pokemon.name, imageUrl)
     }
 
     override fun getItemCount(): Int = pokemons.size
 
-    fun setOnItemClickListener(clickListener: (id: Int) -> Unit) {
+    fun setOnItemClickListener(clickListener: (name: String) -> Unit) {
         this.clickListener = clickListener
     }
 }
