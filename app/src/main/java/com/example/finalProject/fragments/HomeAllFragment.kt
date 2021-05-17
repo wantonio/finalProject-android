@@ -14,6 +14,7 @@ import com.example.finalProject.adapter.PokemonAdapter
 import com.example.finalProject.viewmodels.PokemonesListViewM
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.example.finalProject.models.PokemonListItem
 
 class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     private var _binding: HomeAllFragmentBinding? = null
@@ -27,6 +28,15 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
              val action = HomeAllFragmentDirections.actionHomeAllToPokemonDetailsFragment(it)
              findNavController().navigate(action)
          }
+
+        adapter.addFavorite = {
+            pokemon, pos, shouldAdd ->
+            if (shouldAdd) {
+                viewModel.insertFavorite(1, pokemon.name, pokemon.url)
+            } else {
+                viewModel.deleteFavorite(1, pokemon.name)
+            }
+        }
 
         viewModel.makeAPIRequest()
     }
@@ -62,7 +72,7 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
             toggleEmptyView(it.results.isEmpty())
 
             adapter.totalCount = it.count
-            adapter.pokemons = it.results
+            adapter.pokemons = it.results as MutableList<PokemonListItem>
         }
 
     }
