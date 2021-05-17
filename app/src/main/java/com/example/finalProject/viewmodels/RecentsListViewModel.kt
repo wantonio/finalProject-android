@@ -1,42 +1,55 @@
 package com.example.finalProject.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
-import com.example.finalProject.db.PokemonRecentDataBase
-import com.example.finalProject.db.entities.PokemonRecent
-import com.example.finalProject.db.entities.User
-import com.example.finalProject.repositories.PokemonRecentRepository
-import com.example.finalProject.repositories.PokemonRepository
+import com.example.finalProject.db.PokemonDatabase
+import com.example.finalProject.db.entities.Recent
+import com.example.finalProject.models.PokemonListItem
+import com.example.finalProject.repositories.RecentRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.AndroidViewModel
 
-class PokemonRecentViewModel(application: Application) : AndroidViewModel(application) {
+class RecentsListViewModel(application: Application) : AndroidViewModel(application) {
 
-
-     //val getAllPokemon LiveData<List<PokemonRecent>>
-    private val repository: PokemonRecentRepository
-    private var pokemon: PokemonRecent? = null
+    private val recentsList = MutableLiveData<List<PokemonListItem>>()
+    private var repository: RecentRepository
 
     init {
-        val PokemonRecentDAO = PokemonRecentDataBase.getDatabase(application).PokemonRecentDAO()
-        repository = PokemonRecentRepository(PokemonRecentDAO)
-        //getAllPokemon = repository.getAllPokemon()
+        val recentDao = PokemonDatabase.getDatabase(application).RecentDAO()
+        repository = RecentRepository(recentDao)
     }
 
-    fun insertPokemon(pokemon: PokemonRecent){
-        viewModelScope.launch(Dispatchers.IO){
-            repository.insertPokemon(pokemon)
-        }
-    }
-
-    fun getAllPokemon() : LiveData<List<PokemonRecent>> = getAllPokemon
-
-    /*fun getUserById(emailUser: String, passwordUser: String): User? {
+    fun getUserRecents():MutableLiveData<List<PokemonListItem>>  {
         viewModelScope.launch(Dispatchers.IO) {
-            user = repository.getUserById(emailUser, passwordUser)
+            val items = repository.getUserRecents(1).map{
+                PokemonListItem(it.name, it.url, true)
+            }
+            recentsList.postValue(items)
         }
-        return user
-    } */
+
+        return recentsList
+    }
+
+    fun isRecent(userId: Int, pokemonName: String, cb: (fav: Boolean) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val fav = repository.isPokemonRecent(userId, pokemonName).isNotEmpty()
+            cb(fav)
+        }
+    }
+
+    fun insertRecent(userId: Int, pokemonName: String, url: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertRecent(Recent(0, userId, pokemonName, url))
+        }
+    }
+
+    fun deleteRecent(userId: Int, pokemonName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteRecent(userId, pokemonName)
+        }
+    }
 
 }

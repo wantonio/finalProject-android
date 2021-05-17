@@ -1,21 +1,29 @@
 package com.example.finalProject.repositories
 
-import android.content.Context
 import androidx.lifecycle.LiveData
-import com.example.finalProject.db.PokemonDatabase
-import com.example.finalProject.db.dao.PokemonRecentDAO
-import com.example.finalProject.db.dao.UserDAO
-import com.example.finalProject.db.entities.PokemonRecent
-import com.example.finalProject.db.entities.User
+import com.example.finalProject.db.dao.RecentDAO
+import com.example.finalProject.db.entities.Recent
 
-class PokemonRecentRepository(private val PokemonRecentDao: PokemonRecentDAO) {
+class RecentRepository(private val recentDAO: RecentDAO) {
 
-    suspend fun insertPokemon(pokemon: PokemonRecent){
-        PokemonRecentDao.insertPokemon(pokemon)
+    suspend fun getUserRecents(userId: Int): List<Recent> = recentDAO.getUserRecents(userId)
+
+    suspend fun isPokemonRecent(userId: Int, pokemonName: String): List<Int>{
+        return recentDAO.isPokemonRecent(
+            userId,
+            pokemonName
+        )
     }
 
-    fun getAllPokemon(): LiveData<List<PokemonRecent>> = PokemonRecentDao.getAllPokemon()
+    suspend fun insertRecent(favorite: Recent){
+        recentDAO.insertRecent(favorite)
+    }
 
-   //fun getUserById(emailUser: String, passwordUser: String): User = PokemonRecentDao.getUserById(emailUser, passwordUser)
+    suspend fun deleteRecent(userId: Int, pokemonName: String){
+        return recentDAO.deleteRecent(
+            userId,
+            pokemonName
+        )
+    }
 
 }

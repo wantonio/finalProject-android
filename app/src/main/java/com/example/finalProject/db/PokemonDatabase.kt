@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.finalProject.db.dao.RecentDAO
 import com.example.finalProject.db.dao.UserDAO
 import com.example.finalProject.db.entities.User
 import java.security.AccessControlContext
@@ -12,6 +13,7 @@ import java.security.AccessControlContext
 abstract class PokemonDatabase  : RoomDatabase(){
 
     abstract fun UserDAO():UserDAO
+    abstract fun RecentDAO(): RecentDAO
 
     companion object{
         @Volatile

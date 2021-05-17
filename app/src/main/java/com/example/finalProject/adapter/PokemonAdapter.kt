@@ -12,6 +12,7 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
     var onEmptyList: (() -> Unit)? = null
 
     var totalCount = 0
+    var addRecent: ((pokemon: PokemonListItem, position: Int, shouldAdd: Boolean) -> Unit)? = null
     var pokemons: List<PokemonListItem> = emptyList()
         set(value) {
             field = value
@@ -24,12 +25,21 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
         }
 
     inner class PokemonViewHolder(private val binding: ListCellBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(name: String, imageUrl: String) {
-            binding.namePokemon.text = name
+        fun bind(pokemon: PokemonListItem, imageUrl: String, position: Int) {
+            binding.namePokemon.text = pokemon.name
             binding.imageView.loadSvg(imageUrl)
             binding.root.setOnClickListener {
-                clickListener(name)
+                clickListener(pokemon.name)
             }
+
+            binding.toggleButtonRecent.isChecked = pokemon.isRecent
+
+            binding.toggleButtonRecent.setOnClickListener{
+                val isChecked = binding.toggleButtonRecent.isChecked
+                pokemon.isRecent = isChecked
+                addRecent?.invoke(pokemon, position, isChecked)
+            }
+
         }
     }
 
@@ -42,7 +52,7 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
         val idPattern = Regex("""(\d+)/$""")
         val pokemonId =  idPattern.find(pokemon.url)?.groupValues?.get(1) ?: "1"
         val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/$pokemonId.svg"
-        holder.bind(pokemon.name, imageUrl)
+        holder.bind(pokemon, imageUrl, position)
     }
 
     override fun getItemCount(): Int = pokemons.size
