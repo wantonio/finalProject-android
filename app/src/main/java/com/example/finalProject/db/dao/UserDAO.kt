@@ -17,6 +17,6 @@ interface UserDAO {
     fun getAllUser(): LiveData<List<User>>
 
     @Query("SELECT * FROM user_table where email == (:emailUser) and password == (:passwordUser)")
-    fun getUserById(emailUser: String, passwordUser: String): User
+    suspend fun getUserById(emailUser: String, passwordUser: String): User
 
 }

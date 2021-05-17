@@ -4,14 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.finalProject.db.dao.FavoriteDAO
 import com.example.finalProject.db.dao.UserDAO
+import com.example.finalProject.db.entities.Favorite
 import com.example.finalProject.db.entities.User
-import java.security.AccessControlContext
 
-@Database(entities = [User::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, Favorite::class], version = 1, exportSchema = false)
 abstract class PokemonDatabase  : RoomDatabase(){
 
     abstract fun UserDAO():UserDAO
+    abstract fun FavoriteDAO():FavoriteDAO
 
     companion object{
         @Volatile
