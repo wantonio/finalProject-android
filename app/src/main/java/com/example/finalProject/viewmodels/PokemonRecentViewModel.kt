@@ -3,37 +3,40 @@ package com.example.finalProject.viewmodels
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.finalProject.db.PokemonDatabase
+import com.example.finalProject.db.PokemonRecentDataBase
+import com.example.finalProject.db.entities.PokemonRecent
 import com.example.finalProject.db.entities.User
+import com.example.finalProject.repositories.PokemonRecentRepository
 import com.example.finalProject.repositories.PokemonRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class UserViewModel(application: Application) : AndroidViewModel(application) {
+class PokemonRecentViewModel(application: Application) : AndroidViewModel(application) {
 
-    val getAllUser: LiveData<List<User>>
-    private val repository: PokemonRepository
-    private var user: User? = null
+
+     //val getAllPokemon LiveData<List<PokemonRecent>>
+    private val repository: PokemonRecentRepository
+    private var pokemon: PokemonRecent? = null
 
     init {
-        val userDao = PokemonDatabase.getDatabase(application).UserDAO()
-        repository = PokemonRepository(userDao)
-        getAllUser = repository.getAllUser()
+        val PokemonRecentDAO = PokemonRecentDataBase.getDatabase(application).PokemonRecentDAO()
+        repository = PokemonRecentRepository(PokemonRecentDAO)
+        //getAllPokemon = repository.getAllPokemon()
     }
 
-    fun insertUser(user: User){
+    fun insertPokemon(pokemon: PokemonRecent){
         viewModelScope.launch(Dispatchers.IO){
-            repository.insertUser(user)
+            repository.insertPokemon(pokemon)
         }
     }
 
-    fun getAllUser() : LiveData<List<User>> = getAllUser
+    fun getAllPokemon() : LiveData<List<PokemonRecent>> = getAllPokemon
 
-    fun getUserById(emailUser: String, passwordUser: String): User? {
+    /*fun getUserById(emailUser: String, passwordUser: String): User? {
         viewModelScope.launch(Dispatchers.IO) {
             user = repository.getUserById(emailUser, passwordUser)
         }
         return user
-    }
+    } */
 
 }

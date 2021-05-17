@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.finalProject.databinding.HomeAllFragmentBinding
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import com.example.finalProject.adapter.PokemonAdapter
 import com.example.finalProject.viewmodels.PokemonesListViewM
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.example.finalProject.db.entities.User
 
 class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     private var _binding: HomeAllFragmentBinding? = null
@@ -71,4 +73,19 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
         binding.emptyListAll.visibility = if (show) View.VISIBLE else View.GONE
         binding.pokemonListAllRecyclerView.visibility = if (show) View.GONE else View.VISIBLE
     }
+
+
+  /*  private fun insertDataToDatabase() {
+        val pokemonName = binding.TxtFragName.text.toString()
+        val pokemonName1 = binding.
+        TxtFragUser.text.toString()
+        val image = binding.imageView.text.toString()
+
+
+        val user = User(0,userName,name,email,password)
+        mUserViewModel.insertUser(user)
+        Toast.makeText(requireContext(), "Usuario creado", Toast.LENGTH_LONG).show()
+        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+    } */
+
 }

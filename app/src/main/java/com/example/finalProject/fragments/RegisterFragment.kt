@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.finalProject.R
 import com.example.finalProject.databinding.FragmentRegisterBinding
 import com.example.finalProject.db.entities.User
-import com.example.finalProject.viewmodels.PokemonListViewModel
+//import com.example.finalProject.viewmodels.PokemonListViewModel
 import com.example.finalProject.viewmodels.UserViewModel
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
@@ -28,7 +28,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
     private val disposable = CompositeDisposable()
-    private val viewModel: PokemonListViewModel by viewModels()
+   // private val viewModel: PokemonListViewModel by viewModels()
     private lateinit var mUserViewModel: UserViewModel
 
     override fun onCreateView(
