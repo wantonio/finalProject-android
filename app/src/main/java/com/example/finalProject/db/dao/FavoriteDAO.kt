@@ -11,10 +11,7 @@ import com.example.finalProject.db.models.UserFavorites
 @Dao
 interface FavoriteDAO {
     @Query("SELECT * FROM favorite where userId == (:userId)")
-    suspend fun getUserFavorites(userId: Int): List<Favorite>
-
-    @Query("SELECT id FROM favorite where userId == (:userId) and name == (:pokemonName)")
-    suspend fun isPokemonFavorite(userId: Int, pokemonName: String): List<Int>
+    fun getUserFavorites(userId: Int): LiveData<List<Favorite>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertFavorite(favorites: Favorite)

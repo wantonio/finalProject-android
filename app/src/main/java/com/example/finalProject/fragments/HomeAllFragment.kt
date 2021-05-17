@@ -15,6 +15,7 @@ import com.example.finalProject.viewmodels.PokemonesListViewM
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.finalProject.models.PokemonListItem
+import com.example.finalProject.utils.PrefManager
 
 class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     private var _binding: HomeAllFragmentBinding? = null
@@ -32,9 +33,9 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
         adapter.addFavorite = {
             pokemon, pos, shouldAdd ->
             if (shouldAdd) {
-                viewModel.insertFavorite(1, pokemon.name, pokemon.url)
+                viewModel.insertFavorite(pokemon.name, pokemon.url)
             } else {
-                viewModel.deleteFavorite(1, pokemon.name)
+                viewModel.deleteFavorite(pokemon.name)
             }
         }
 
@@ -68,13 +69,19 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
 
         binding.pokemonListAllRecyclerView.adapter = adapter
 
-        viewModel.getPokemonList().observe(viewLifecycleOwner) {
-            toggleEmptyView(it.results.isEmpty())
+        viewModel.getPokemonList().observe(viewLifecycleOwner) { pokemons ->
+            viewModel.getUserFavorites().observe(viewLifecycleOwner) { favs ->
+                toggleEmptyView(pokemons.results.isEmpty())
+                var list = pokemons.results.map{
+                        pokemon ->
+                        pokemon.isFavorite = favs.any{ f -> f.name == pokemon.name}
+                        pokemon
+                }
 
-            adapter.totalCount = it.count
-            adapter.pokemons = it.results as MutableList<PokemonListItem>
+                adapter.totalCount = pokemons.count
+                adapter.pokemons = list as MutableList<PokemonListItem>
+            }
         }
-
     }
 
     private fun toggleEmptyView(show: Boolean) {

@@ -7,21 +7,19 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.example.finalProject.adapter.PokemonAdapter
 import com.example.finalProject.databinding.HomeFavoritesFragmentBinding
-import com.example.finalProject.models.Contact
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.finalProject.R
 import com.example.finalProject.models.PokemonListItem
-import com.example.finalProject.viewmodels.FavoritesListViewModel
+import com.example.finalProject.viewmodels.FavoritesViewModel
 
 class HomeFavoritesFragment : Fragment() {
     private var _binding: HomeFavoritesFragmentBinding? = null
     private val binding get() = _binding!!
     private val adapter = PokemonAdapter()
-    private val viewModel: FavoritesListViewModel by viewModels()
+    private val viewModel: FavoritesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,10 +43,10 @@ class HomeFavoritesFragment : Fragment() {
         adapter.addFavorite = {
                 pokemon, pos, shouldAdd ->
             if (shouldAdd) {
-                viewModel.insertFavorite(1, pokemon.name, pokemon.url)
+                viewModel.insertFavorite(pokemon.name, pokemon.url)
             } else {
                 adapter.pokemons.removeAt(pos)
-                viewModel.deleteFavorite(1, pokemon.name)
+                viewModel.deleteFavorite(pokemon.name)
                 adapter.notifyDataSetChanged()
                 toggleEmptyView(adapter.pokemons.isEmpty())
             }
@@ -60,11 +58,14 @@ class HomeFavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.getUserFavorites().observe(viewLifecycleOwner) {
             toggleEmptyView(it.isEmpty())
-            adapter.pokemons = it as MutableList<PokemonListItem>
+
+            val items = it.map{
+                PokemonListItem(it.name, it.url, true)
+            }
+
+            adapter.pokemons = items as MutableList<PokemonListItem>
         }
     }
-
-
 
     private fun toggleEmptyView(show: Boolean) {
         binding.emptyListAll.visibility = if (show) View.VISIBLE else View.GONE

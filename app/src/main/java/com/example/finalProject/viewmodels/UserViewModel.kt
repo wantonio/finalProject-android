@@ -29,11 +29,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getAllUser() : LiveData<List<User>> = getAllUser
 
-    fun getUserById(emailUser: String, passwordUser: String): User? {
-        viewModelScope.launch(Dispatchers.IO) {
-            user = repository.getUserById(emailUser, passwordUser)
-        }
-        return user
+    suspend fun getUserById(emailUser: String, passwordUser: String): User? {
+        return repository.getUserById(emailUser, passwordUser)
     }
 
 }

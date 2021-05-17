@@ -14,6 +14,6 @@ class PokemonRepository(private val userDAO: UserDAO) {
 
     fun getAllUser(): LiveData<List<User>> = userDAO.getAllUser()
 
-    fun getUserById(emailUser: String, passwordUser: String): User = userDAO.getUserById(emailUser, passwordUser)
+    suspend fun getUserById(emailUser: String, passwordUser: String): User = userDAO.getUserById(emailUser, passwordUser)
 
 }
