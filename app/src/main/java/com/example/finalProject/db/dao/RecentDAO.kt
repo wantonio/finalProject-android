@@ -12,7 +12,7 @@ interface RecentDAO {
     @Query("SELECT * FROM recent where userId == (:userId)")
     suspend fun getUserRecents(userId: Int): List<Recent>
 
-    @Query("SELECT id FROM recent where userId == (:userId) and name == (:pokemonName)")
+     @Query("SELECT id FROM recent where userId == (:userId) and name == (:pokemonName)")
     suspend fun isPokemonRecent(userId: Int, pokemonName: String): List<Int>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

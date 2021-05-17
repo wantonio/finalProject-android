@@ -38,7 +38,7 @@ class HomeRecentFragment : Fragment() {
         binding.pokemonsRecyclerView.addItemDecoration(itemDecoration)
 
         adapter.setOnItemClickListener {
-            val action = HomeFavoritesFragmentDirections.actionHomeFavoritesToPokemonDetailsFragment(it)
+            val action = HomeRecentFragmentDirections.actionHomeRecentToPokemonDetailsFragment(it)
             findNavController().navigate(action)
         }
 
@@ -60,7 +60,7 @@ class HomeRecentFragment : Fragment() {
 
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-            viewModel.getUserRecents().observe(viewLifecycleOwner) {
+            viewModel.getUserRecent().observe(viewLifecycleOwner) {
                 toggleEmptyView(it.isEmpty())
                 adapter.pokemons = it as MutableList<PokemonListItem>
             }

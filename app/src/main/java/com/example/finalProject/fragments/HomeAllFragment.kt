@@ -30,6 +30,18 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
              findNavController().navigate(action)
          }
 
+             adapter.addRecent = {
+                     pokemon, pos, shouldAdd ->
+                 if (shouldAdd) {
+
+                     viewModel.insertRecent(1, pokemon.name, pokemon.url)
+                 } else {
+                     viewModel.deleteRecent(1, pokemon.name)
+                 }
+             }
+
+
+
         viewModel.makeAPIRequest()
     }
 
@@ -75,17 +87,6 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     }
 
 
-  /*  private fun insertDataToDatabase() {
-        val pokemonName = binding.TxtFragName.text.toString()
-        val pokemonName1 = binding.
-        TxtFragUser.text.toString()
-        val image = binding.imageView.text.toString()
 
-
-        val user = User(0,userName,name,email,password)
-        mUserViewModel.insertUser(user)
-        Toast.makeText(requireContext(), "Usuario creado", Toast.LENGTH_LONG).show()
-        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-    } */
 
 }

@@ -14,7 +14,7 @@ import androidx.lifecycle.AndroidViewModel
 
 class RecentsListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val recentsList = MutableLiveData<List<PokemonListItem>>()
+    private val recentList = MutableLiveData<List<PokemonListItem>>()
     private var repository: RecentRepository
 
     init {
@@ -22,15 +22,15 @@ class RecentsListViewModel(application: Application) : AndroidViewModel(applicat
         repository = RecentRepository(recentDao)
     }
 
-    fun getUserRecents():MutableLiveData<List<PokemonListItem>>  {
+    fun getUserRecent():MutableLiveData<List<PokemonListItem>>  {
         viewModelScope.launch(Dispatchers.IO) {
             val items = repository.getUserRecents(1).map{
                 PokemonListItem(it.name, it.url, true)
             }
-            recentsList.postValue(items)
+            recentList.postValue(items)
         }
 
-        return recentsList
+        return recentList
     }
 
     fun isRecent(userId: Int, pokemonName: String, cb: (fav: Boolean) -> Unit) {
@@ -42,7 +42,7 @@ class RecentsListViewModel(application: Application) : AndroidViewModel(applicat
 
     fun insertRecent(userId: Int, pokemonName: String, url: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertRecent(Recent(0, userId, pokemonName, url))
+            repository.insertRecent(Recent(1, userId, pokemonName, url))
         }
     }
 

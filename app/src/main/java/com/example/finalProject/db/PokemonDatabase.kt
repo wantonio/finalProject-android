@@ -6,10 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.finalProject.db.dao.RecentDAO
 import com.example.finalProject.db.dao.UserDAO
+import com.example.finalProject.db.entities.Recent
 import com.example.finalProject.db.entities.User
 import java.security.AccessControlContext
 
-@Database(entities = [User::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, Recent::class], version = 1, exportSchema = false)
 abstract class PokemonDatabase  : RoomDatabase(){
 
     abstract fun UserDAO():UserDAO

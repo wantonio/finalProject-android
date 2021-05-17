@@ -2,9 +2,11 @@ package com.example.finalProject.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.finalProject.databinding.ListCellBinding
 import com.example.finalProject.extensions.loadSvg
+import com.example.finalProject.fragments.HomeAllFragmentDirections
 import com.example.finalProject.models.PokemonListItem
 
 class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
@@ -28,17 +30,22 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
         fun bind(pokemon: PokemonListItem, imageUrl: String, position: Int) {
             binding.namePokemon.text = pokemon.name
             binding.imageView.loadSvg(imageUrl)
+
+
+
+
             binding.root.setOnClickListener {
                 clickListener(pokemon.name)
+
+
+
+                    addRecent?.invoke(pokemon, position, true)
+
+
             }
 
-            binding.toggleButtonRecent.isChecked = pokemon.isRecent
 
-            binding.toggleButtonRecent.setOnClickListener{
-                val isChecked = binding.toggleButtonRecent.isChecked
-                pokemon.isRecent = isChecked
-                addRecent?.invoke(pokemon, position, isChecked)
-            }
+
 
         }
     }
@@ -54,6 +61,8 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
         val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/$pokemonId.svg"
         holder.bind(pokemon, imageUrl, position)
     }
+
+
 
     override fun getItemCount(): Int = pokemons.size
 
