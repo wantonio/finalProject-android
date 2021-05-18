@@ -16,6 +16,7 @@ import com.example.finalProject.viewmodels.PokemonesListViewM
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.finalProject.db.entities.User
+import com.example.finalProject.models.PokemonListItem
 
 class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     private var _binding: HomeAllFragmentBinding? = null
@@ -29,16 +30,17 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
              val action = HomeAllFragmentDirections.actionHomeAllToPokemonDetailsFragment(it)
              findNavController().navigate(action)
          }
-
              adapter.addRecent = {
                      pokemon, pos, shouldAdd ->
                  if (shouldAdd) {
 
-                     viewModel.insertRecent(1, pokemon.name, pokemon.url)
+                     viewModel.insertRecent(pokemon.name, pokemon.url)
                  } else {
-                     viewModel.deleteRecent(1, pokemon.name)
+                     viewModel.deleteRecent(pokemon.name)
                  }
              }
+
+
 
 
 
@@ -72,11 +74,19 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
 
         binding.pokemonListAllRecyclerView.adapter = adapter
 
-        viewModel.getPokemonList().observe(viewLifecycleOwner) {
-            toggleEmptyView(it.results.isEmpty())
+        viewModel.getPokemonList().observe(viewLifecycleOwner) { pokemons ->
+            viewModel.getUserRecent().observe(viewLifecycleOwner) { rec ->
+                toggleEmptyView(pokemons.results.isEmpty())
+                var list = pokemons.results.map {
+                    pokemon ->
+                    pokemon.isRecent = rec.any { r -> r.name == pokemon.name }
+                    pokemon
+                }
 
-            adapter.totalCount = it.count
-            adapter.pokemons = it.results
+                adapter.totalCount = pokemons.count
+                adapter.pokemons = list as MutableList<PokemonListItem>
+            }
+
         }
 
     }

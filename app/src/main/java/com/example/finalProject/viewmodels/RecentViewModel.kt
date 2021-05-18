@@ -13,9 +13,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.AndroidViewModel
 import com.example.finalProject.utils.PrefManager
 
-class RecentsListViewModel(application: Application) : AndroidViewModel(application) {
+open class RecentViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val recentList = MutableLiveData<List<PokemonListItem>>()
+
     private var repository: RecentRepository
     private var userId: Int? = null
 
@@ -25,8 +25,8 @@ class RecentsListViewModel(application: Application) : AndroidViewModel(applicat
         repository = RecentRepository(recentDao)
     }
 
-    fun getUserRecent():LiveData<List<Recent>>  {
-        return repository.getUserRecent(userId ?: 0 )
+    fun getUserRecent(): LiveData<List<Recent>>  {
+        return repository.getUserRecentAl(userId ?: 0 )
     }
 
 

@@ -16,7 +16,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class PokemonesListViewM(application: Application) : AndroidViewModel(application) {
+class PokemonesListViewM(application: Application)  : RecentViewModel(application){
     private val pokemonList = MutableLiveData<PokemonListResponse>()
     private var service: APIServiceList
     private var repository: RecentRepository
@@ -32,7 +32,7 @@ class PokemonesListViewM(application: Application) : AndroidViewModel(applicatio
         repository = RecentRepository(recentDao)
     }
 
-    fun makeAPIRequest(){
+  /*  fun makeAPIRequest(){
         service.getAllPokemons(limit = 200)
             .enqueue(object : Callback<PokemonListResponse> {
                 override fun onResponse(call: Call<PokemonListResponse>, response: Response<PokemonListResponse>) {
@@ -54,37 +54,27 @@ class PokemonesListViewM(application: Application) : AndroidViewModel(applicatio
 
             })
 
+    } */
+
+    fun makeAPIRequest(){
+        service.getAllPokemons(limit = 200)
+            .enqueue(object : Callback<PokemonListResponse> {
+                override fun onResponse(call: Call<PokemonListResponse>, response: Response<PokemonListResponse>) {
+                    response.body()?.let { response ->
+                        pokemonList.postValue(response)
+                    }
+                }
+
+                override fun onFailure(call: Call<PokemonListResponse>, t: Throwable) {
+                    val a = ""
+                }
+            })
     }
 
     fun getPokemonList() : LiveData<PokemonListResponse>{
         return pokemonList
     }
 
-    fun getUserRecent(cb: (list: List<Recent>) -> Unit) {
-        viewModelScope.launch(Dispatchers.IO){
-            val recent = repository.getUserRecents(1)
-            cb(recent)
-        }
-    }
-
-    fun isRecent(userId: Int, pokemonName: String, cb: (fav: Boolean) -> Unit) {
-        viewModelScope.launch(Dispatchers.IO){
-            val rec = repository.isPokemonRecent(userId, pokemonName).isNotEmpty()
-            cb(rec)
-        }
-    }
-
-    fun insertRecent(userId: Int, pokemonName: String, url: String){
-        viewModelScope.launch(Dispatchers.IO){
-            repository.insertRecent(Recent(0, userId, pokemonName, url))
-        }
-    }
-
-    fun deleteRecent(userId: Int, pokemonName: String){
-        viewModelScope.launch(Dispatchers.IO){
-            repository.deleteRecent(userId, pokemonName)
-        }
-    }
 
 
 

@@ -6,17 +6,12 @@ import com.example.finalProject.db.entities.Recent
 
 class RecentRepository(private val recentDAO: RecentDAO) {
 
-    suspend fun getUserRecents(userId: Int): List<Recent> = recentDAO.getUserRecents(userId)
+    fun getUserRecentAl(userId: Int): LiveData<List<Recent>> = recentDAO.getUserRecent(userId)
 
-    suspend fun isPokemonRecent(userId: Int, pokemonName: String): List<Int>{
-        return recentDAO.isPokemonRecent(
-            userId,
-            pokemonName
-        )
-    }
 
-    suspend fun insertRecent(favorite: Recent){
-        recentDAO.insertRecent(favorite)
+
+    suspend fun insertRecent(recent: Recent){
+        recentDAO.insertRecent(recent)
     }
 
     suspend fun deleteRecent(userId: Int, pokemonName: String){

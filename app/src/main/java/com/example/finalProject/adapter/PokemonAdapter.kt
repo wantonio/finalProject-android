@@ -12,7 +12,6 @@ import com.example.finalProject.models.PokemonListItem
 class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
     lateinit var clickListener: (pokemonName: String) -> Unit
     var onEmptyList: (() -> Unit)? = null
-
     var totalCount = 0
     var addRecent: ((pokemon: PokemonListItem, position: Int, shouldAdd: Boolean) -> Unit)? = null
     var pokemons: List<PokemonListItem> = emptyList()
@@ -30,20 +29,22 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
         fun bind(pokemon: PokemonListItem, imageUrl: String, position: Int) {
             binding.namePokemon.text = pokemon.name
             binding.imageView.loadSvg(imageUrl)
-
-
-
-
             binding.root.setOnClickListener {
                 clickListener(pokemon.name)
 
 
-
                     addRecent?.invoke(pokemon, position, true)
-
-
+                binding.root.isClickable = pokemon.isRecent
             }
 
+
+
+            /*binding.toggleButton.setOnClickListener{
+                val isChecked = binding.toggleButton.isChecked
+                pokemon.isFavorite = isChecked
+                addFavorite?.invoke(pokemon, position, isChecked)
+            }
+        } */
 
 
 

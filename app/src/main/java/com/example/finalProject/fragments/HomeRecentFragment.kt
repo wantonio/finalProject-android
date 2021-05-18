@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.example.finalProject.adapter.PokemonAdapter
 import com.example.finalProject.databinding.HomeRecentFragmentBinding
-import com.example.finalProject.models.Contact
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
@@ -15,13 +14,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.finalProject.R
 import com.example.finalProject.models.PokemonListItem
-import com.example.finalProject.viewmodels.RecentsListViewModel
+import com.example.finalProject.viewmodels.RecentViewModel
 
 class HomeRecentFragment : Fragment() {
     private var _binding: HomeRecentFragmentBinding? = null
     private val binding get() = _binding!!
     private val adapter = PokemonAdapter()
-    private val viewModel: RecentsListViewModel by viewModels()
+    private val viewModel: RecentViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,17 +42,19 @@ class HomeRecentFragment : Fragment() {
         }
 
 
+
         adapter.addRecent = {
                 pokemon, pos, shouldAdd ->
             if (shouldAdd) {
-                viewModel.insertRecent(1, pokemon.name, pokemon.url)
+                viewModel.insertRecent(pokemon.name, pokemon.url)
             } else {
                 //adapter.pokemons.removeAt(pos)
-                viewModel.deleteRecent(1, pokemon.name)
+                viewModel.deleteRecent(pokemon.name)
                 adapter.notifyDataSetChanged()
                 toggleEmptyView(adapter.pokemons.isEmpty())
             }
         }
+
 
         return binding.root
     }
@@ -62,7 +63,13 @@ class HomeRecentFragment : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             viewModel.getUserRecent().observe(viewLifecycleOwner) {
                 toggleEmptyView(it.isEmpty())
-                adapter.pokemons = it as MutableList<PokemonListItem>
+
+                val items = it.map{
+                    PokemonListItem(it.name, it.url, true)
+                }
+
+               // adapter.pokemons = it as MutableList<PokemonListItem>
+                adapter.pokemons = items as MutableList<PokemonListItem>
             }
         }
 

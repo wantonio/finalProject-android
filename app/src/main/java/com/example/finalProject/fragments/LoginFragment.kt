@@ -9,10 +9,12 @@ import androidx.core.view.ScaleGestureDetectorCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.finalProject.R
 import com.example.finalProject.databinding.FragmentLoginBinding
 import com.example.finalProject.db.entities.User
+import com.example.finalProject.utils.PrefManager
 import com.example.finalProject.viewmodels.UserViewModel
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
@@ -23,6 +25,9 @@ import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.concurrent.thread
 
 class LoginFragment : Fragment(R.layout.fragment_login){
@@ -69,17 +74,24 @@ class LoginFragment : Fragment(R.layout.fragment_login){
                 }
         )
 
+        val preferences =  context?.let { PrefManager(it) }
+
         //disposable.add(
         binding.btnLogin.setOnClickListener {
             //.observeOn(AndroidSchedulers.mainThread())
             //.subscribe {
-            user = mUserViewModel.getUserById(binding.txtUser.text.toString(), binding.txtPassword.text.toString())
-            if (user?.email == binding.txtUser.text.toString() && user?.password == binding.txtPassword.text.toString()) {
-                findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
-            } else {
-                Toast.makeText(requireContext(), "Usuario o contraseña incorrecto", Toast.LENGTH_LONG).show()
+            lifecycleScope.launch(Dispatchers.IO) {
+                val user = mUserViewModel.getUserById(binding.txtUser.text.toString(), binding.txtPassword.text.toString())
+
+                withContext(Dispatchers.Main) {
+                    if (user?.email == binding.txtUser.text.toString() && user?.password == binding.txtPassword.text.toString()) {
+                        preferences?.saveLoginDetails(user?.email, user?.userName, user?.id)
+                        findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                    } else {
+                        Toast.makeText(requireContext(), "Usuario o contraseña incorrecto", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
-            //}
         }
 
         //)
