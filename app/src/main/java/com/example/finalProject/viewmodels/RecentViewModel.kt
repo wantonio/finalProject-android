@@ -11,44 +11,41 @@ import kotlinx.coroutines.launch
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.AndroidViewModel
+import com.example.finalProject.utils.PrefManager
 
 class RecentsListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val recentList = MutableLiveData<List<PokemonListItem>>()
     private var repository: RecentRepository
+    private var userId: Int? = null
 
     init {
         val recentDao = PokemonDatabase.getDatabase(application).RecentDAO()
+        userId = PrefManager(application.applicationContext).userId
         repository = RecentRepository(recentDao)
     }
 
-    fun getUserRecent():MutableLiveData<List<PokemonListItem>>  {
+    fun getUserRecent():LiveData<List<Recent>>  {
+        return repository.getUserRecent(userId ?: 0 )
+    }
+
+
+
+
+    fun insertRecent(pokemonName: String, url: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val items = repository.getUserRecents(1).map{
-                PokemonListItem(it.name, it.url, true)
+            userId?.let{
+                repository.insertRecent(Recent(0, it, pokemonName, url))
             }
-            recentList.postValue(items)
-        }
-
-        return recentList
-    }
-
-    fun isRecent(userId: Int, pokemonName: String, cb: (fav: Boolean) -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val fav = repository.isPokemonRecent(userId, pokemonName).isNotEmpty()
-            cb(fav)
         }
     }
 
-    fun insertRecent(userId: Int, pokemonName: String, url: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.insertRecent(Recent(1, userId, pokemonName, url))
-        }
-    }
 
-    fun deleteRecent(userId: Int, pokemonName: String) {
+    fun deleteRecent(pokemonName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteRecent(userId, pokemonName)
+            userId?.let {
+                repository.deleteRecent(it, pokemonName)
+            }
         }
     }
 
