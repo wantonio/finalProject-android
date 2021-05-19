@@ -35,11 +35,9 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
 
         adapter.addRecent = {
                 pokemon, pos, shouldAdd ->
-            if (shouldAdd) {
+            if (shouldAdd ) {
 
                 viewModelRecent.insertRecent(pokemon.name, pokemon.url)
-            } else {
-                viewModelRecent.deleteRecent(pokemon.name)
             }
         }
 

@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.finalProject.R
 import com.example.finalProject.models.PokemonListItem
+import com.example.finalProject.viewmodels.FavoritesViewModel
 import com.example.finalProject.viewmodels.PokemonesListViewM
 import com.example.finalProject.viewmodels.RecentViewModel
 
@@ -21,8 +22,9 @@ class HomeRecentFragment : Fragment() {
     private var _binding: HomeRecentFragmentBinding? = null
     private val binding get() = _binding!!
     private val adapter = PokemonAdapter()
-    private val viewModelFavs: PokemonesListViewM by viewModels()
     private val viewModel: RecentViewModel by viewModels()
+    private val viewModelFav: FavoritesViewModel by viewModels()
+    private val viewModelAll: PokemonesListViewM by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,14 +46,26 @@ class HomeRecentFragment : Fragment() {
         }
 
 
+        adapter.addFavorite = {
+                pokemon, pos, shouldAdd ->
+            if (shouldAdd) {
+
+                viewModelFav.insertFavorite(pokemon.name, pokemon.url)
+            } else {
+                adapter.pokemons.removeAt(pos)
+                viewModelFav.deleteFavorite(pokemon.name)
+                adapter.notifyDataSetChanged()
+                toggleEmptyView(adapter.pokemons.isEmpty())
+            }
+        }
 
         adapter.addRecent = {
                 pokemon, pos, shouldAdd ->
             if (shouldAdd) {
                 viewModel.insertRecent(pokemon.name, pokemon.url)
             } else {
-                //adapter.pokemons.removeAt(pos)
-                viewModel.deleteRecent(pokemon.name)
+                adapter.pokemons.removeAt(pos)
+                //viewModel.deleteRecent(pokemon.name)
                 adapter.notifyDataSetChanged()
                 toggleEmptyView(adapter.pokemons.isEmpty())
             }
@@ -61,40 +75,26 @@ class HomeRecentFragment : Fragment() {
         return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-        adapter.addFavorite = {
-                pokemon, pos, shouldAdd ->
-            if (shouldAdd) {
-                viewModelFavs.insertFavorite(pokemon.name, pokemon.url)
-            } else {
-                viewModelFavs.deleteFavorite(pokemon.name)
-            }
-        }
-
-
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.getUserRecent().observe(viewLifecycleOwner) {
             toggleEmptyView(it.isEmpty())
 
             val items = it.map{
-                PokemonListItem(it.name, it.url, true)
+                PokemonListItem(it.name, it.url, false, true)
             }
 
-            // adapter.pokemons = it as MutableList<PokemonListItem>
             adapter.pokemons = items as MutableList<PokemonListItem>
         }
 
-        viewModelFavs.getPokemonList().observe(viewLifecycleOwner) { pokemons ->
-            viewModelFavs.getUserFavorites().observe(viewLifecycleOwner) { favs ->
+
+
+        viewModelAll.getPokemonList().observe(viewLifecycleOwner) { pokemons ->
+            viewModelFav.getUserFavorites().observe(viewLifecycleOwner) { favs ->
                 toggleEmptyView(pokemons.results.isEmpty())
-                var list = pokemons.results.map { pokemon ->
-                    pokemon.isFavorite = favs.any { f -> f.name == pokemon.name }
+                var list = pokemons.results.map{
+                        pokemon ->
+                    pokemon.isFavorite = favs.any{ f -> f.name == pokemon.name}
                     pokemon
                 }
 
@@ -103,7 +103,8 @@ class HomeRecentFragment : Fragment() {
                 adapter.totalCount = pokemons.count
                 adapter.pokemons = list as MutableList<PokemonListItem>
             }
-        }
+
+    }
 
     }
 

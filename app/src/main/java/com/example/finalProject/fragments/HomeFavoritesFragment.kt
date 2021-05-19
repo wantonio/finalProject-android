@@ -14,12 +14,14 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.finalProject.R
 import com.example.finalProject.models.PokemonListItem
 import com.example.finalProject.viewmodels.FavoritesViewModel
+import com.example.finalProject.viewmodels.RecentViewModel
 
 class HomeFavoritesFragment : Fragment() {
     private var _binding: HomeFavoritesFragmentBinding? = null
     private val binding get() = _binding!!
     private val adapter = PokemonAdapter()
     private val viewModel: FavoritesViewModel by viewModels()
+    private val viewModelRecent: RecentViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +49,17 @@ class HomeFavoritesFragment : Fragment() {
             } else {
                 adapter.pokemons.removeAt(pos)
                 viewModel.deleteFavorite(pokemon.name)
+                adapter.notifyDataSetChanged()
+                toggleEmptyView(adapter.pokemons.isEmpty())
+            }
+        }
+
+        adapter.addRecent = {
+                pokemon, pos, shouldAdd ->
+            if (shouldAdd) {
+                viewModelRecent.insertRecent(pokemon.name, pokemon.url)
+            } else {
+                adapter.pokemons.removeAt(pos)
                 adapter.notifyDataSetChanged()
                 toggleEmptyView(adapter.pokemons.isEmpty())
             }

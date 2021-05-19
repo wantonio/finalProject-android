@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.finalProject.databinding.ListCellBinding
 import com.example.finalProject.extensions.loadSvg
 import com.example.finalProject.models.PokemonListItem
+import com.example.finalProject.models.PokemonListItemRecent
 import io.reactivex.rxjava3.core.Observable
 
 class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
@@ -15,8 +16,11 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
     var onEmptyList: (() -> Unit)? = null
     var totalCount = 0
     var addFavorite: ((pokemon: PokemonListItem, position: Int, shouldAdd: Boolean) -> Unit)? = null
+    var addFavoriteRec: ((pokemon: PokemonListItem, position: Int, shouldAddFavRec: Boolean) -> Unit)? = null
     var addRecent: ((pokemon: PokemonListItem, position: Int, shouldAdd: Boolean) -> Unit)? = null
     var pokemons = mutableListOf<PokemonListItem>()
+   // var pokemonsRecent = mutableListOf<PokemonListItemRecent>()
+
         set(value) {
             field = value
 
@@ -31,19 +35,24 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
         fun bind(pokemon: PokemonListItem, imageUrl: String, position: Int) {
             binding.namePokemon.text = pokemon.name
             binding.imageView.loadSvg(imageUrl)
-            binding.root.setOnClickListener {
+              binding.root.setOnClickListener {
                 clickListener(pokemon.name)
-                addRecent?.invoke(pokemon, position, true)
-                binding.root.isClickable = pokemon.isRecent
-            }
+                 addRecent?.invoke(pokemon, position, true)
+
+             }
 
             binding.toggleButton.isChecked = pokemon.isFavorite
+
 
             binding.toggleButton.setOnClickListener{
                 val isChecked = binding.toggleButton.isChecked
                 pokemon.isFavorite = isChecked
                 addFavorite?.invoke(pokemon, position, isChecked)
             }
+
+
+
+
         }
     }
 
@@ -53,6 +62,7 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         val pokemon = pokemons[position]
+       // val pokemonR = pokemonsRecent[position]
         val idPattern = Regex("""(\d+)/$""")
         val pokemonId =  idPattern.find(pokemon.url)?.groupValues?.get(1) ?: "1"
         val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/$pokemonId.svg"
