@@ -86,7 +86,7 @@ class LoginFragment : Fragment(R.layout.fragment_login){
 
                 withContext(Dispatchers.Main) {
                     if (user?.email == binding.txtUser.text.toString() && user?.password == binding.txtPassword.text.toString()) {
-                        preferences?.saveLoginDetails(user?.email, user?.userName, user?.id)
+                        preferences?.saveLoginDetails(user?.email, user?.name, user?.id)
                         findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
                     } else {
                         Toast.makeText(requireContext(), "Usuario o contraseña incorrecto", Toast.LENGTH_LONG).show()

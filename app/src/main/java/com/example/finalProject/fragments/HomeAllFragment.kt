@@ -83,6 +83,10 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val userName = this.context?.let { PrefManager(it).name } ?: ""
+
+        binding.textGreeting.text = "Hola $userName"
+
         binding.pokemonListAllRecyclerView.adapter = adapter
 
         viewModel.getPokemonList().observe(viewLifecycleOwner) { pokemons ->

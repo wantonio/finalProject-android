@@ -2,59 +2,68 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeRecent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeRecentFragment"
-    android:id="@+id/homeRecent">
+    android:padding="16dp"
+    tools:context=".fragments.HomeRecentFragment">
 
     <!--  TODO: Paso 2 Agregamos el RecyclerView al layout del fragment/activity  -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pokemonsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-
+        app:layout_constraintTop_toBottomOf="@+id/screenLabel"
         app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintTop_toBottomOf="@+id/recentSearchtextInputLayout"
         tools:itemCount="7"
         tools:listitem="@layout/list_cell" />
+
     <com.example.finalProject.views.EmptyListView
         android:id="@+id/emptyListAll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:textLabel="@string/empty"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        android:visibility="gone"
-        />
+        app:textLabel="@string/empty" />
 
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/recentSearchtextInputLayout"
-        android:layout_width="409dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+    <TextView
+        android:id="@+id/textGreeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="16dp"
+        android:text="TextView"
+        android:textColor="@color/red"
+        android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:imeOptions="actionDone"
-            android:hint="Search" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/screenLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:gravity="center"
+        android:text="Recents"
+        android:textColor="@color/red"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textGreeting"
+        tools:text="Recents" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

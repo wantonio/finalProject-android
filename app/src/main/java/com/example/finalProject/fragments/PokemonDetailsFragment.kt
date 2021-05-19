@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -19,6 +21,7 @@ import com.example.finalProject.databinding.FragmentPokemonDetailsBinding
 import com.example.finalProject.extensions.loadMaybeSvg
 import com.example.finalProject.models.PokemonDetail
 import com.example.finalProject.utils.CustomDividerItemDecoration
+import com.example.finalProject.utils.PrefManager
 import com.example.finalProject.utils.Utils
 import com.example.finalProject.viewmodels.PokemonDetailsViewModel
 import com.google.android.material.chip.Chip
@@ -53,6 +56,10 @@ class PokemonDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val userName = this.context?.let { PrefManager(it).name } ?: ""
+
+        binding.textGreeting.text = "Hola $userName"
+
         Glide.with(this).load(R.drawable.loading).into(binding.imageLoading)
 
         toggleLoading(true)
@@ -65,6 +72,8 @@ class PokemonDetailsFragment : Fragment() {
             toggleLoading(false)
         },{
             //TODO manejar error
+            Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+            findNavController().popBackStack()
         }))
     }
 

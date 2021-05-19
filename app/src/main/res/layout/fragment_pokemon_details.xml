@@ -29,6 +29,16 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/textGreeting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:paddingEnd="16dp"
+                android:text="TextView"
+                android:textColor="@color/red"
+                android:textSize="18dp" />
+
+            <TextView
                 android:id="@+id/pokemonName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

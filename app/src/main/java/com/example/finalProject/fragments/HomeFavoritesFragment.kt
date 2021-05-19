@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.finalProject.R
 import com.example.finalProject.models.PokemonListItem
+import com.example.finalProject.utils.PrefManager
 import com.example.finalProject.viewmodels.FavoritesViewModel
 import com.example.finalProject.viewmodels.RecentViewModel
 
@@ -69,6 +70,10 @@ class HomeFavoritesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val userName = this.context?.let { PrefManager(it).name } ?: ""
+
+        binding.textGreeting.text = "Hola $userName"
+
         viewModel.getUserFavorites().observe(viewLifecycleOwner) {
             toggleEmptyView(it.isEmpty())
 
