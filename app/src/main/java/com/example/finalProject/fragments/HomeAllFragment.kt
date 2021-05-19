@@ -17,6 +17,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.finalProject.models.PokemonListItem
 import com.example.finalProject.utils.PrefManager
 import com.example.finalProject.viewmodels.PokemonesListViewModelRecent
+import com.jakewharton.rxbinding4.view.clicks
+import com.jakewharton.rxbinding4.widget.textChanges
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     private var _binding: HomeAllFragmentBinding? = null
@@ -24,6 +28,7 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     private val adapter = PokemonAdapter()
     private val viewModel: PokemonesListViewM by viewModels()
     private val viewModelRecent: PokemonesListViewModelRecent by viewModels()
+    private val disposable = CompositeDisposable()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,6 +113,30 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
             }
 
         }
+
+        disposable.add(
+            binding.searchButton.clicks()
+                .subscribe {
+                    searchPokemon()
+                }
+        )
+    }
+
+    private fun searchPokemon() {
+
+        disposable.add(
+
+            binding.SearchBoxAll.textChanges()
+
+                .map { it.toString()}
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    val action = HomeAllFragmentDirections.actionHomeAllToPokemonDetailsFragment(it)
+                    findNavController().navigate(action)
+
+
+                }
+        )
     }
 
     private fun toggleEmptyView(show: Boolean) {

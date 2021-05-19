@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AllSearchtextInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/TextInputLayout"
         tools:itemCount="7"
         tools:listitem="@layout/list_cell" />
     <com.example.finalProject.views.EmptyListView
@@ -37,7 +37,7 @@
         />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/AllSearchtextInputLayout"
+        android:id="@+id/TextInputLayout"
         android:layout_width="409dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -48,11 +48,22 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/SearchBoxAll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:imeOptions="actionDone"
             android:hint="Search" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:src="@android:drawable/ic_menu_search"
+        app:layout_constraintBottom_toBottomOf="@+id/TextInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/TextInputLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
