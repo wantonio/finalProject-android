@@ -22,11 +22,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class PokemonesListViewM(application: Application) : FavoritesViewModel(application) {
+class PokemonesListViewModelRecent(application: Application) : RecentViewModel(application) {
     private val pokemonList = MutableLiveData<PokemonListResponse>()
     private var service: APIServiceList
-    private var repository: FavoriteRepository
-    private var repositoryRecent: RecentRepository
+    private var repository: RecentRepository
 
     init {
         val retrofit = Retrofit.Builder()
@@ -35,12 +34,11 @@ class PokemonesListViewM(application: Application) : FavoritesViewModel(applicat
             .build()
 
         service = retrofit.create(APIServiceList::class.java)
-        val favoriteDao = PokemonDatabase.getDatabase(application).FavoriteDAO()
-        repository = FavoriteRepository(favoriteDao)
-
         val recentDao = PokemonDatabase.getDatabase(application).RecentDAO()
-        repositoryRecent = RecentRepository(recentDao)
+        repository = RecentRepository(recentDao)
     }
+
+
 
     fun makeAPIRequest(){
         service.getAllPokemons(limit = 200)
@@ -57,7 +55,5 @@ class PokemonesListViewM(application: Application) : FavoritesViewModel(applicat
             })
     }
 
-    fun getPokemonList() : LiveData<PokemonListResponse>{
-        return pokemonList
-    }
+
 }

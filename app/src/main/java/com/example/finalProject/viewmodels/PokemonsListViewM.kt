@@ -10,6 +10,7 @@ import com.example.finalProject.db.models.UserFavorites
 import com.example.finalProject.models.PokemonListItem
 import com.example.finalProject.models.PokemonListResponse
 import com.example.finalProject.repositories.FavoriteRepository
+import com.example.finalProject.repositories.RecentRepository
 import io.reactivex.rxjava3.annotations.NonNull
 import io.reactivex.rxjava3.core.Observable
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +26,7 @@ class PokemonesListViewM(application: Application) : FavoritesViewModel(applicat
     private val pokemonList = MutableLiveData<PokemonListResponse>()
     private var service: APIServiceList
     private var repository: FavoriteRepository
+    private var repositoryRecent: RecentRepository
 
     init {
         val retrofit = Retrofit.Builder()
@@ -35,6 +37,9 @@ class PokemonesListViewM(application: Application) : FavoritesViewModel(applicat
         service = retrofit.create(APIServiceList::class.java)
         val favoriteDao = PokemonDatabase.getDatabase(application).FavoriteDAO()
         repository = FavoriteRepository(favoriteDao)
+
+        val recentDao = PokemonDatabase.getDatabase(application).RecentDAO()
+        repositoryRecent = RecentRepository(recentDao)
     }
 
     fun makeAPIRequest(){

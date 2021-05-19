@@ -15,6 +15,7 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
     var onEmptyList: (() -> Unit)? = null
     var totalCount = 0
     var addFavorite: ((pokemon: PokemonListItem, position: Int, shouldAdd: Boolean) -> Unit)? = null
+    var addRecent: ((pokemon: PokemonListItem, position: Int, shouldAdd: Boolean) -> Unit)? = null
     var pokemons = mutableListOf<PokemonListItem>()
         set(value) {
             field = value
@@ -32,6 +33,8 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
             binding.imageView.loadSvg(imageUrl)
             binding.root.setOnClickListener {
                 clickListener(pokemon.name)
+                addRecent?.invoke(pokemon, position, true)
+                binding.root.isClickable = pokemon.isRecent
             }
 
             binding.toggleButton.isChecked = pokemon.isFavorite

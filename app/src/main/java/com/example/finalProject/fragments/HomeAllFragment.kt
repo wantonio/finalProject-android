@@ -16,12 +16,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.finalProject.models.PokemonListItem
 import com.example.finalProject.utils.PrefManager
+import com.example.finalProject.viewmodels.PokemonesListViewModelRecent
 
 class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
     private var _binding: HomeAllFragmentBinding? = null
     private val binding get() = _binding!!
     private val adapter = PokemonAdapter()
     private val viewModel: PokemonesListViewM by viewModels()
+    private val viewModelRecent: PokemonesListViewModelRecent by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +32,16 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
              val action = HomeAllFragmentDirections.actionHomeAllToPokemonDetailsFragment(it)
              findNavController().navigate(action)
          }
+
+        adapter.addRecent = {
+                pokemon, pos, shouldAdd ->
+            if (shouldAdd) {
+
+                viewModelRecent.insertRecent(pokemon.name, pokemon.url)
+            } else {
+                viewModelRecent.deleteRecent(pokemon.name)
+            }
+        }
 
         adapter.addFavorite = {
             pokemon, pos, shouldAdd ->
@@ -78,9 +91,24 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
                         pokemon
                 }
 
+
+
                 adapter.totalCount = pokemons.count
                 adapter.pokemons = list as MutableList<PokemonListItem>
             }
+
+            viewModelRecent.getUserRecent().observe(viewLifecycleOwner) { rec ->
+                toggleEmptyView(pokemons.results.isEmpty())
+                var list = pokemons.results.map {
+                        pokemon ->
+                    pokemon.isRecent = rec.any { r -> r.name == pokemon.name }
+                    pokemon
+                }
+
+                adapter.totalCount = pokemons.count
+                adapter.pokemons = list as MutableList<PokemonListItem>
+            }
+
         }
     }
 
@@ -88,4 +116,6 @@ class HomeAllFragment : Fragment(R.layout.home_all_fragment) {
         binding.emptyListAll.visibility = if (show) View.VISIBLE else View.GONE
         binding.pokemonListAllRecyclerView.visibility = if (show) View.GONE else View.VISIBLE
     }
+
+
 }

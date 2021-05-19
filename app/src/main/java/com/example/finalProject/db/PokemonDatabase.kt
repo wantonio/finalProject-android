@@ -5,15 +5,18 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.finalProject.db.dao.FavoriteDAO
+import com.example.finalProject.db.dao.RecentDAO
 import com.example.finalProject.db.dao.UserDAO
 import com.example.finalProject.db.entities.Favorite
+import com.example.finalProject.db.entities.Recent
 import com.example.finalProject.db.entities.User
 
-@Database(entities = [User::class, Favorite::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, Favorite::class, Recent::class], version = 1, exportSchema = false)
 abstract class PokemonDatabase  : RoomDatabase(){
 
     abstract fun UserDAO():UserDAO
     abstract fun FavoriteDAO():FavoriteDAO
+    abstract fun RecentDAO(): RecentDAO
 
     companion object{
         @Volatile
